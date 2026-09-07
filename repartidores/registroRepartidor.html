@@ -19,7 +19,7 @@
         <h5 class="card-title">REGISTRO REPARTIDOR</h5>
 
         <div class="formulario">
-          <form action="registroRepartidor.php" method="post">
+          <form action="" method="post">
             <div class="name">
               <input type="text"  name="nombre"  required>
               <label>NOMBRE</label>
@@ -30,14 +30,14 @@
               <label>CONTRASEÑA</label>
             </div>
 
-            <div class="email">
-              <input type="date"  name="fecha_nacimiento" required>
-              <label>FECHA DE NACIMIENTO</label>
+            <div class="telefono">
+              <input type="number phone"  name="telefono" required>
+              <label>TELÉFONO</label>
             </div>
 
-            <div class="telefono">
-              <input type="number"  name="telefono" required>
-              <label>TELEFONO</label>
+            <div class="cedula">
+              <input type="number"  name="cedula" required>
+              <label>CÉDULA</label>
             </div>
             
             ¿YA TIENES CUENTA? <a href="inicioRepartidor.html">INGRESA AQUÍ</a>
@@ -45,6 +45,10 @@
 
             <div class="rein">
               <button type="submit" class="btn btn-primary" value="Registrar">REGISTRAR</button>
+            </div>
+
+            <div class="rein">
+              <a href="../PanelAdmin.html" class="btn btn-primary">VOLVER</a>
             </div>
 
           </form>

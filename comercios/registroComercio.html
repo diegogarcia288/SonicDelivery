@@ -19,31 +19,35 @@
         <h5 class="card-title">REGISTRO COMERCIO</h5>
 
         <div class="formulario">
-          <form action="registroComercio.php" method="post">
+          <form action="" method="post">
             <div class="name">
               <input type="text" name="nombre" required>
-              <label>NOMBRE COMERCIO</label>
+              <label>USUARIO COMERCIO</label>
             </div>
 
             <div class="contrasena">
+              <input type="password" name="contraseña" required>
+              <label>CONTRASEÑA COMERCIO</label>
+            </div>
+
+            <div class="direccion">
               <input type="text" name="direccion" required>
               <label>DIRECCIÓN COMERCIO</label>
             </div>
 
-            <div class="email">
+            <div class="correo">
               <input type="email" name="correo" required>
-              <label>EMAIL COMERCIO</label>
-            </div>
-
-            <div class="contrasena">
-              <input type="password" name="contrasena" required>
-              <label>CONTRASEÑA COMERCIO</label>
+              <label>CORREO ELECTRÓNICO</label>
             </div>
 
             ¿YA TIENES CUENTA? <a href="inicioComercio.html">INGRESA AQUÍ</a>
 
             <div class="rein">
               <button type="submit" class="btn btn-primary" value="Registrar">REGISTRAR</button>
+            </div>
+
+            <div class="rein">
+              <a href="../PanelAdmin.html" class="btn btn-primary">VOLVER</a>
             </div>
 
           </form>
