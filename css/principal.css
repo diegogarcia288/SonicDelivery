@@ -22,7 +22,7 @@ body{
 }
 .navbar-custom{
     background-color: rgb(36, 171, 248);
-    padding: 10px 20px;
+    padding: 10px;
 }
 
         /** IMAGEN MAPA **/
@@ -44,4 +44,24 @@ h1{
     border-width: 7px;
     border-color: rgb(18, 79, 114);
     background-color: rgb(39, 132, 186);
+}
+
+table{
+    margin: 50px auto;
+    border-style: solid !important; 
+    border-width: 7px !important;
+    border-color: rgb(18, 79, 114) !important;
+}
+
+thead{
+    border-style: solid !important; 
+    border-width: 7px !important;
+    border-color: rgb(18, 79, 114) !important;
+}
+
+footer{
+    position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
