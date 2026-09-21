@@ -20,20 +20,20 @@
 
         <div class="formulario">
           <form action="validarRepartidor.php" method="post">
-            <div class="name">
-              <input type="text" name="nombre" required>
+            <div class="name" id="nom">
+              <input type="text" name="nombre" >
               <label>NOMBRE</label>
             </div>
 
-            <div class="contrasena">
-              <input type="password" name="contrasena" required>
+            <div class="contrasena" id="cont">
+              <input type="password" name="contrasena">
               <label>CONTRASEÑA</label>
             </div>
 
             ¿AÚN NO TIENES CUENTA? <a href="registroRepartidor.html">REGISTRATE AQUÍ</a>
 
-            <div class="rein">
-              <button type="submit" class="btn btn-primary">Registrar</button>
+            <div class="rein" id="reg">
+              <button type="submit" id="guardar" class="btn btn-primary">Registrar</button>
             </div>
 
             <div class="rein">
@@ -47,6 +47,9 @@
     </div>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../js/inicio_repartidores.js"></script>
 
 </body>
 </html>
