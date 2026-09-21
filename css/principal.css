@@ -65,3 +65,12 @@ footer{
   left: 0;
   width: 100%;
 }
+
+form{
+    margin: 50px auto;
+    width: 50%;
+    border-style: solid !important; 
+    border-width: 7px !important;
+    border-color: rgb(18, 79, 114) !important;
+    background-color: rgb(39, 132, 186);
+}
