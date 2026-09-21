@@ -20,35 +20,35 @@
 
         <div class="formulario">
           <form action="" method="post">
-            <div class="name">
-              <input type="text" name="nombre" required>
+            <div class="name" id="nombre_comercio">
+              <input type="text" name="nombre">
               <label>USUARIO COMERCIO</label>
             </div>
 
-            <div class="nit">
-              <input type="number" name="nit" required>
+            <div class="nit" id="nit_comercio">
+              <input type="number" name="nit">
               <label>NIT COMERCIO</label>
             </div>
 
-            <div class="contrasena">
-              <input type="password" name="contraseña" required>
+            <div class="contrasena" id="contrasena_comercio">
+              <input type="password" name="contraseña">
               <label>CONTRASEÑA COMERCIO</label>
             </div>
 
-            <div class="direccion">
-              <input type="text" name="direccion" required>
+            <div class="direccion" id="direccion_comercio">
+              <input type="text" name="direccion">
               <label>DIRECCIÓN COMERCIO</label>
             </div>
 
-            <div class="correo">
-              <input type="email" name="correo" required>
+            <div class="correo" id="correo_comercio">
+              <input type="email" name="correo">
               <label>CORREO ELECTRÓNICO</label>
             </div>
 
             ¿YA TIENES CUENTA? <a href="inicioComercio.html">INGRESA AQUÍ</a>
 
             <div class="rein">
-              <button type="submit" class="btn btn-primary" value="Registrar">REGISTRAR</button>
+              <button type="submit" id="guardar" class="btn btn-primary" value="Registrar">REGISTRAR</button>
             </div>
 
             <div class="rein">
@@ -63,6 +63,8 @@
   </div>
 </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/registro_comercios.js"></script>
 
 </body>
 </html>

@@ -19,21 +19,21 @@
         <h5 class="card-title">INGRESA COMERCIO</h5>
 
         <div class="formulario">
-          <form action="validarComercio.php" method="post">
-            <div class="name">
-              <input type="text" name="nombre_comercio" required>
+          <form action="" method="post">
+            <div class="name" id="nombre_comercio">
+              <input type="text" name="nombre_comercio">
               <label>USUARIO COMERCIO</label>
-            </div>
+            </div>  
 
-            <div class="contrasena">
-              <input type="password" name="contrasena" required>
+            <div class="contrasena" id="contrasena_comercio">
+              <input type="password" name="contrasena">
               <label>CONTRASEÑA COMERCIO</label>
             </div>
 
             ¿AÚN NO TIENES CUENTA? <a href="registroComercio.html">REGISTRATE AQUÍ</a>
 
             <div class="rein">
-              <button type="submit" class="btn btn-primary">INGRESA</button>
+              <button type="submit" id="guardar" class="btn btn-primary">INGRESA</button>
             </div>
 
             <div class="rein">
@@ -47,6 +47,9 @@
     </div>
   </div>
 </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/inicio_comercios.js"></script>
 
 </body>
 </html>

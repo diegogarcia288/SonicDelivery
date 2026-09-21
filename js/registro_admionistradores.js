@@ -22,9 +22,9 @@ function validarInformacion() {
             ${telefono_administrador}`
         );
 
+    }
 
-
-        if (!/^[a-zA-Z]+$/.test(nombre_administrador)) {
+    if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_administrador)) {
             console.log("Nombre debe contener letras")
             Swal.fire({
                 title: "Nombre debe contener letras",
@@ -33,15 +33,15 @@ function validarInformacion() {
             return;
         }
 
-        if (!/^\d+$/.test(cedula_administrador)) {
+    if (!/^\d+$/.test(cedula_administrador)) {
             console.log("Valor debe contener números")
             Swal.fire({
                 title: "Valor debe contener números",
                 icon: "error"
             });
             return;
-        }
-        if (!/^[a-zA-Z0-9_]{3,16}$/.test(contraseña_administrador)) {
+    }
+        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_administrador)) {
             console.log("contraseña administrador debe contener letras, números y guiones bajos")
             Swal.fire({
                 title: "contraseña administrador debe contener letras, números y guiones bajos",
@@ -50,7 +50,7 @@ function validarInformacion() {
             return;
         }
         
-        if (!/^\d+$/.test(telefono_administrador)) {
+    if (!/^\d+$/.test(telefono_administrador)) {
             console.log("telefono debe contener solo números")
             Swal.fire({
                 title: "telefono debe contener solo números",
@@ -59,6 +59,5 @@ function validarInformacion() {
             return;
         }
         
-}
 }
 document.getElementById("guardar").onclick = validarInformacion;

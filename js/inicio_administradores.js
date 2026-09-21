@@ -1,7 +1,8 @@
 function validarInformacion() {
-    let nombre_administrador= document.getElementById("nombre_administrador").value;
+
+    let nombre_administrador = document.getElementById("nombre_administrador").value;
     let contraseña_administrador = document.getElementById("contraseña_administrador").value;
-    
+
 
     if (!nombre_administrador || !contraseña_administrador) {
         Swal.fire({
@@ -20,8 +21,8 @@ function validarInformacion() {
         );
     }
 
-    }
-    if (!/^[a-zA-Z]+$/.test(nombre_administrador)) {
+
+    if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_administrador)) {
         console.log("nombre debe contener solo letras")
         Swal.fire({
             title: "nombre debe contener ",
@@ -29,16 +30,16 @@ function validarInformacion() {
         });
         return;
     }
-    
-    if (!/^[a-zA-Z0-9]+$/.test(contraseña_administrador)) {
+
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_administrador)) {
         console.log("La contraseña debe contener solo letras y números");
         Swal.fire({
-             title: " debe contener letras y números",
-             icon: "error"
-    });
-    return; 
+            title: "La contraseña debe contener letras y números",
+            icon: "error"
+        });
+        return;
+    }
 }
 
-    
 
 document.getElementById("guardar").onclick = validarInformacion;
