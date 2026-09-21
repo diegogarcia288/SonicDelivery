@@ -21,30 +21,30 @@
         <div class="formulario">
           <form action="" method="post">
 
-            <div class="name">
-              <input type="text" name="nombre" required>
+            <div class="name" id="nombre_administrador">
+              <input type="text" name="nombre" >
               <label>NOMBRE ADMINISTRADOR</label>
             </div>
 
-            <div class="name">
-              <input type="number" name="cedula" required>
+            <div class="name" id="cedula_administrador">
+              <input type="number" name="cedula" >
               <label>CÉDULA ADMINISTRADOR</label>
             </div>
 
-            <div class="contrasena">
-              <input type="password" name="contraseña" required>
+            <div class="contrasena" id="contraseña_administrador">
+              <input type="password" name="contraseña" >
               <label>CONTRASEÑA ADMINISTRADOR</label>
             </div>
 
-            <div class="telefono">
-              <input type="number" name="telefono" required>
+            <div class="telefono" id="telefono_administrador">
+              <input type="number" name="telefono" >
               <label>TELÉFONO ADMINISTRADOR</label>
             </div>
 
             ¿YA TIENES CUENTA? <a href="inicioAdministrador.html">INGRESA AQUÍ</a>
 
             <div class="rein">
-              <button type="submit" class="btn btn-primary" value="Registrar">REGISTRAR</button>
+              <button type="submit" id="guardar" class="btn btn-primary" value="Registrar">REGISTRAR</button>
             </div>
 
             <div class="rein">
@@ -58,7 +58,7 @@
     </div>
   </div>
 </div>
-
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../js/registro_admionistradores.js"></script>
 </body>
 </html>
