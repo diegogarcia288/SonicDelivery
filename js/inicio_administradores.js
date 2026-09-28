@@ -1,45 +1,37 @@
-function validarInformacion() {
+function validarInformacion(event) {
+    event.preventDefault();
 
-    let nombre_administrador = document.getElementById("nombre_administrador").value;
-    let contraseña_administrador = document.getElementById("contraseña_administrador").value;
-
+    let nombre_administrador = document.getElementById("nombre_administrador").value.trim();
+    let contraseña_administrador = document.getElementById("contraseña_administrador").value.trim();
 
     if (!nombre_administrador || !contraseña_administrador) {
         Swal.fire({
-            position: "top-end",
             icon: "error",
-            title: "Campos Incompletos",
-            showConfirmButton: false,
-            timer: 1500
+            title: "No pueden haber campos vacios",
+            showConfirmButton: true
         });
+        return;
     }
-    else {
-        console.log(
-            `Informacion del admin: \n
-            ${nombre_administrador} \n
-            ${contraseña_administrador}`
-        );
-    }
-
 
     if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_administrador)) {
-        console.log("nombre debe contener solo letras")
         Swal.fire({
-            title: "nombre debe contener ",
+            title: "El nombre debe contener solo letras",
             icon: "error"
         });
         return;
     }
 
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_administrador)) {
-        console.log("La contraseña debe contener solo letras y números");
         Swal.fire({
-            title: "La contraseña debe contener letras y números",
+            title: "La contraseña debe contener letras, números y caracteres especiales",
             icon: "error"
         });
         return;
     }
-}
 
+    console.log(
+        `Informacion del admin: \n${nombre_administrador} \n${contraseña_administrador}`
+    );
+}
 
 document.getElementById("guardar").onclick = validarInformacion;

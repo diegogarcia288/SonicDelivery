@@ -1,64 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGISTRO ADMINISTRADORES-SONIC DELIVERY</title>
-      <link rel="stylesheet" href="../css/registro.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REGISTRO ADMINISTRADORES-SONIC DELIVERY</title>
+  <link rel="stylesheet" href="../css/registro.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
+
 <body>
-    
-<div class="card mb-3" style="max-width: 540px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="../imagenes/sonic logo.jpeg" class="img-fluid rounded-start" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">REGISTRO ADMINISTRADOR</h5>
 
-        <div class="formulario">
-          <form action="" method="post">
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="../imagenes/sonic logo.jpeg" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">REGISTRO ADMINISTRADOR</h5>
 
-            <div class="name" id="nombre_administrador">
-              <input type="text" name="nombre" >
-              <label>NOMBRE ADMINISTRADOR</label>
-            </div>
+          <div class="formulario">
+            <form action="" method="post">
 
-            <div class="name" id="cedula_administrador">
-              <input type="number" name="cedula" >
-              <label>CÉDULA ADMINISTRADOR</label>
-            </div>
+              <div class="name" >
+                <input type="text" id="nombre_administrador" name="nombre">
+                <label>NOMBRE ADMINISTRADOR</label>
+              </div>
 
-            <div class="contrasena" id="contraseña_administrador">
-              <input type="password" name="contraseña" >
-              <label>CONTRASEÑA ADMINISTRADOR</label>
-            </div>
+              <div class="name">
+                <input type="number" id="cedula_administrador" name="cedula">
+                <label>CÉDULA ADMINISTRADOR</label>
+              </div>
 
-            <div class="telefono" id="telefono_administrador">
-              <input type="number" name="telefono" >
-              <label>TELÉFONO ADMINISTRADOR</label>
-            </div>
+              <div class="contrasena">
+                <input type="password" id="contraseña_administrador" name="contraseña">
+                <label>CONTRASEÑA ADMINISTRADOR</label>
+              </div>
 
-            ¿YA TIENES CUENTA? <a href="inicioAdministrador.html">INGRESA AQUÍ</a>
+              <div class="telefono">
+                <input type="number" id="telefono_administrador" name="telefono">
+                <label>TELÉFONO ADMINISTRADOR</label>
+              </div>
 
-            <div class="rein">
-              <button type="submit" id="guardar" class="btn btn-primary" value="Registrar">REGISTRAR</button>
-            </div>
+              ¿YA TIENES CUENTA? <a href="inicioAdministrador.html">INGRESA AQUÍ</a>
 
-            <div class="rein">
-              <a href="../PanelAdmin.html" class="btn btn-primary">VOLVER</a>
-            </div>
+              <div class="rein">
+                <button type="submit" id="guardar" class="btn btn-primary" value="Registrar">REGISTRAR</button>
+              </div>
 
-          </form>
+              <div class="rein">
+                <a href="../PanelAdmin.html" class="btn btn-primary">VOLVER</a>
+              </div>
+            </form>
+
+          </div>
         </div>
-
       </div>
     </div>
-  </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="../js/registro_admionistradores.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/registro_admionistradores.js"></script>
 </body>
+
 </html>

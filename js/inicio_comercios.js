@@ -1,41 +1,40 @@
-function validarInformacion() {
-    let nombre_comercio= document.getElementById("nombre_comercio").value;
-    let contraseña_comercio = document.getElementById("contrasena_comercio").value;
-    
+function validarInformacion(event) {
+    // Evita que el formulario se recargue automáticamente
+    event.preventDefault();
+
+    let nombre_comercio = document.getElementById("nombre_comercio").value.trim();
+    let contraseña_comercio = document.getElementById("contrasena_comercio").value.trim();
 
     if (!nombre_comercio || !contraseña_comercio) {
         Swal.fire({
-            position: "top-end",
             icon: "error",
-            title: "Campos Incompletos",
-            showConfirmButton: false,
-            timer: 1500
+            title: "No pueden haber campos vacios",
+            showConfirmButton: true
         });
-    }
-    else {
-        console.log(
-            `Informacion del comercio: \n
-            ${nombre_comercio} \n
-            ${contraseña_comercio}`
-        );
+        return;
     }
 
     if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_comercio)) {
-        console.log("nombre debe contener solo letras")
+        console.log("nombre debe contener solo letras");
         Swal.fire({
-            title: "nombre debe contener ",
+            title: "El nombre debe contener solo letras",
             icon: "error"
         });
         return;
     }
-    
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_comercio)) {
-        console.log("La contraseña debe contener solo letras y números");
-        Swal.fire({
-             title: "La contraseña debe contener letras y números",
-             icon: "error"
-    });
-    return; 
-}   
 
-document.getElementById("guardar").onclick = validarInformacion;}
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_comercio)) {
+        console.log("La contraseña debe contener letras, números y caracteres especiales");
+        Swal.fire({
+            title: "La contraseña debe contener letras, números y caracteres especiales",
+            icon: "error"
+        });
+        return;
+    }
+
+    console.log(
+        `Informacion del comercio: \n${nombre_comercio} \n${contraseña_comercio}`
+    );
+}
+
+document.getElementById("guardar").onclick = validarInformacion;
