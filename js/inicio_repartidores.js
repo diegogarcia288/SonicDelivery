@@ -1,45 +1,39 @@
-function validarInformacion() {
+function validarInformacion(event) {
+    event.preventDefault();
 
-    let nombre_repartidor = document.getElementById("nombre_repartidor").value;
-    let contraseña_repartidor = document.getElementById("contraseña_repartidor").value;
+    let nombre_repartidor = document.getElementById("nombre_repartidor").value.trim();
+    let contraseña_repartidor = document.getElementById("contrasena_repartidor").value.trim();
 
-
-    if (!nombre_repartidor|| !contraseña_repartidor) {
+    if (!nombre_repartidor || !contraseña_repartidor) {
         Swal.fire({
-            position: "top-end",
             icon: "error",
-            title: "Campos Incompletos",
-            showConfirmButton: false,
-            timer: 1500
+            title: "No pueden haber campos vacios",
+            showConfirmButton: true
         });
+        return;
     }
-    else {
-        console.log(
-            `Informacion del admin: \n
-            ${nombre_repartidor} \n
-            ${contraseña_repartidor}`
-        );
-    }
-
 
     if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_repartidor)) {
-        console.log("nombre debe contener solo letras")
+        console.log("nombre debe contener solo letras");
         Swal.fire({
-            title: "nombre debe contener ",
+            title: "El nombre debe contener solo letras",
             icon: "error"
         });
         return;
     }
 
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_repartidor)) {
-        console.log("La contraseña debe contener solo letras y números");
+        console.log("La contraseña debe contener letras, números y caracteres especiales");
         Swal.fire({
-            title: "La contraseña debe contener letras y números",
+            title: "La contraseña debe contener letras, números y caracteres especiales",
             icon: "error"
         });
         return;
     }
-}
 
+    console.log(
+        `Informacion del repartidor: \n${nombre_repartidor} \n${contraseña_repartidor}`
+    );
+}
 
 document.getElementById("guardar").onclick = validarInformacion;
