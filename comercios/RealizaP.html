@@ -30,7 +30,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="problemasP.html">Problemas con Pedidos</a>
+            <a class="nav-link active" aria-current="page" href="RealizaP.html">Realiza Pedido</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" href="pedidosD.html">Pedidos Disponibles</a>
@@ -44,16 +44,16 @@
 
   <!--FORMULARIO DE PEDIDO-->
 
-  <form>
+  <form action="" method="post">
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label m-3">Detalles</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      <label class="form-label m-3">Detalles</label>
+      <input type="email" class="form-control" id="email" name="Detalles">
     </div>
     <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label m-3">Dirección</label>
-      <input type="password" class="form-control" id="exampleInputPassword1">
+      <label class="form-label m-3">Dirección</label>
+      <input type="password" class="form-control" id="direccion" name="Direccion">
     </div>
-    <button type="submit" class="btn btn-primary m-3">Submit</button>
+    <button type="submit" id="guardar" class="btn btn-primary m-3">Enviar</button>
   </form>
 
   <footer>
@@ -81,6 +81,8 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/rPedido.js"></script>
 
 </body>
 
