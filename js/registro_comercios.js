@@ -43,6 +43,15 @@ function validarInformacion(event) {
         return;
     }
 
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(direccion_comercio)) {
+        console.log("dirección comercio debe contener letras, números y caracteres especiales");
+        Swal.fire({
+            title: "La dirección debe contener letras, números y caracteres especiales",
+            icon: "error"
+        });
+        return;
+    }
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo_comercio)) {
         console.log("El correo debe contener @");
         Swal.fire({
@@ -60,6 +69,15 @@ function validarInformacion(event) {
         `${direccion_comercio} \n` +
         `${correo_comercio}`
     );
+
+    Swal.fire({
+        icon: "success",
+        title: "El admin fue registrado con éxito, BIENVENIDO.",
+        showConfirmButton: false,
+        timer: 2000
+    })
 }
 
-document.getElementById("guardar").onclick = validarInformacion;
+document.getElementById("guardar").addEventListener("click", function(Event) {
+    validarInformacion(Event);
+})
