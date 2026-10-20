@@ -35,6 +35,15 @@ function validarInformacion(event) {
     console.log(
         `Informacion del comercio: \n${nombre_comercio} \n${contraseña_comercio}`
     );
+
+    Swal.fire({
+        icon: "success",
+        title: "El admin fue registrado con éxito, BIENVENIDO.",
+        showConfirmButton: false,
+        timer: 2000
+    })
 }
 
-document.getElementById("guardar").onclick = validarInformacion;
+document.getElementById("guardar").addEventListener("click", function(Event) {
+    validarInformacion(Event);
+})
