@@ -1,54 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGISTRO ADMINISTRADORES-SONIC DELIVERY</title>
-      <link rel="stylesheet" href="../css/registro.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REGISTRO ADMINISTRADORES-SONIC DELIVERY</title>
+  <link rel="stylesheet" href="../css/registro.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
+
 <body>
-    
-<div class="card mb-3" style="max-width: 540px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="../imagenes/sonic logo.jpeg" class="img-fluid rounded-start" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">INICIO DE SESIÓN ADMINISTRADOR</h5>
 
-        <div class="formulario">
-          <form action="" method="post">
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="../imagenes/sonic logo.jpeg" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">INICIO DE SESIÓN ADMINISTRADOR</h5>
 
-            <div class="name">
-              <input type="text" id="nombre_administrador" name="nombre" >
-              <label>NOMBRE ADMINISTRADOR</label>
-            </div>
+          <div class="formulario">
+            <form action="../PHP/verificarAdmin.php" method="POST">
 
-            <div class="contrasena">
-              <input type="password" id="contraseña_administrador" name="contraseña" >
-              <label>CONTRASEÑA ADMINISTRADOR</label>
-            </div>
+              <div class="name">
+                <input type="number" id="cedula_administrador" name="cedula_administrador"
+                  placeholder="Ingresa tu cédula">
+                <label>CÉDULA ADMINISTRADOR</label>
+              </div>
 
-            ¿AÚN NO TIENES CUENTA? <a href="registroAdmin.html">REGÍSTRATE AQUÍ</a>
+              <div class="contrasena">
+                <input type="password" id="contraseña_administrador" name="contraseña_administrador">
+                <label>CONTRASEÑA ADMINISTRADOR</label>
+              </div>
 
-            <div class="rein">
-              <button type="submit" id="guardar" class="btn btn-primary" value="Iniciar sesión">INICIAR SESIÓN</button>
-            </div>
+              ¿AÚN NO TIENES CUENTA? <a href="registroAdmin.html">REGÍSTRATE AQUÍ</a>
 
-            <div class="rein">
-              <a href="../PanelAdmin.html" class="btn btn-primary">VOLVER</a>
-            </div>
-          </form>
+              <div class="rein">
+                <button type="submit" id="guardar" class="btn btn-primary" value="Iniciar sesión">INICIAR
+                  SESIÓN</button>
+              </div>
 
+              <div class="rein">
+                <a href="../PanelAdmin.html" class="btn btn-primary">VOLVER</a>
+              </div>
+            </form>
+
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="../js/inicio_administradores.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/inicio_administradores.js"></script> 
 
 </body>
+
 </html>

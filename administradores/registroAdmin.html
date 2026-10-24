@@ -22,45 +22,48 @@
           <h5 class="card-title">REGISTRO ADMINISTRADOR</h5>
 
           <div class="formulario">
-            <form action="" method="post">
+            <form action="../PHP/registroAdmin.php" method="POST">
 
-              <div class="name" >
-                <input type="text" id="nombre_administrador" name="nombre" placeholder="En este campo solo letras">
+              <div class="name">
+                <input type="text" id="nombre_administrador" name="nombre_administrador"
+                  placeholder="En este campo solo letras">
                 <label>NOMBRE ADMINISTRADOR</label>
               </div>
 
               <div class="name">
-                <input type="number" id="cedula_administrador" name="cedula" placeholder="En este campo solo números">
+                <input type="number" id="cedula_administrador" name="cedula_administrador"
+                  placeholder="En este campo solo números">
                 <label>CÉDULA ADMINISTRADOR</label>
               </div>
 
               <div class="contrasena">
-                <input type="password" id="contraseña_administrador" name="contraseña" placeholder="Números,letras y caracteres especiales">
+                <input type="password" id="contraseña_administrador" name="contraseña_administrador"
+                  placeholder="Números,letras y caracteres especiales">
                 <label>CONTRASEÑA ADMINISTRADOR</label>
               </div>
 
               <div class="telefono">
-                <input type="number" id="telefono_administrador" name="telefono" placeholder="Solo números">
+                <input type="number" id="telefono_administrador" name="telefono_administrador"
+                  placeholder="Solo números">
                 <label>TELÉFONO ADMINISTRADOR</label>
               </div>
 
               ¿YA TIENES CUENTA? <a href="inicioAdministrador.html">INGRESA AQUÍ</a>
 
               <div class="rein">
-                <button type="submit" id="guardar" class="btn btn-primary" value="Registrar">REGISTRAR</button>
+                <button type="submit" id="guardar" class="btn btn-primary">REGISTRAR</button>
               </div>
-
               <div class="rein">
                 <a href="../PanelAdmin.html" class="btn btn-primary">VOLVER</a>
               </div>
             </form>
-
           </div>
         </div>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/registro_admionistradores.js"></script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/registro_admionistradores.js"></script> 
 </body>
 
 </html>

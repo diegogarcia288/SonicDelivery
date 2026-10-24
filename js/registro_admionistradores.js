@@ -1,12 +1,12 @@
-function validarInformacion(event) {
-    event.preventDefault();
+document.querySelector("form").addEventListener("submit", function(event) {
+    let nombre = document.getElementById("nombre_administrador").value.trim();
+    let cedula = document.getElementById("cedula_administrador").value.trim();
+    let password = document.getElementById("contraseña_administrador").value.trim();
+    let telefono = document.getElementById("telefono_administrador").value.trim();
 
-    let nombre_administrador = document.getElementById("nombre_administrador").value.trim();
-    let cedula_administrador = document.getElementById("cedula_administrador").value.trim();
-    let contraseña_administrador = document.getElementById("contraseña_administrador").value.trim();
-    let telefono_administrador = document.getElementById("telefono_administrador").value.trim();
-
-    if (!nombre_administrador || !cedula_administrador || !contraseña_administrador || !telefono_administrador) {
+    // Validar campos vacíos
+    if (!nombre || !cedula || !password || !telefono) {
+        event.preventDefault();
         Swal.fire({
             icon: "error",
             title: "No pueden haber campos vacios",
@@ -15,8 +15,9 @@ function validarInformacion(event) {
         return;
     }
 
-    if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_administrador)) {
-        console.log("Nombre debe contener letras");
+    // Validar nombre (solo letras)
+    if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre)) {
+        event.preventDefault();
         Swal.fire({
             title: "El nombre debe contener solo letras",
             icon: "error"
@@ -24,8 +25,9 @@ function validarInformacion(event) {
         return;
     }
 
-    if (!/^\d+$/.test(cedula_administrador)) {
-        console.log("Cédula debe contener números");
+    // Validar cédula (solo números)
+    if (!/^\d+$/.test(cedula)) {
+        event.preventDefault();
         Swal.fire({
             title: "La cédula debe contener solo números",
             icon: "error"
@@ -33,8 +35,9 @@ function validarInformacion(event) {
         return;
     }
 
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_administrador)) {
-        console.log("contraseña administrador debe contener letras, números y caracteres especiales");
+    // Validar contraseña (letras, números y especiales, mín. 8 caracteres)
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password)) {
+        event.preventDefault();
         Swal.fire({
             title: "La contraseña debe contener letras, números y caracteres especiales",
             icon: "error"
@@ -42,8 +45,9 @@ function validarInformacion(event) {
         return;
     }
 
-    if (!/^\d+$/.test(telefono_administrador)) {
-        console.log("telefono debe contener solo números");
+    // Validar teléfono (solo números)
+    if (!/^\d+$/.test(telefono)) {
+        event.preventDefault();
         Swal.fire({
             title: "El teléfono debe contener solo números",
             icon: "error"
@@ -51,22 +55,6 @@ function validarInformacion(event) {
         return;
     }
 
-    console.log(
-        `Informacion del administrador: \n` +
-        `${nombre_administrador} \n` +
-        `${cedula_administrador} \n` +
-        `${contraseña_administrador} \n` +
-        `${telefono_administrador}`
-    );
-
-    Swal.fire({
-        icon: "success",
-        title: "El admin fue registrado con éxito, BIENVENIDO.",
-        showConfirmButton: false,
-        timer: 2000
-    })
-}
-
-document.getElementById("guardar").addEventListener("click", function(Event) {
-    validarInformacion(Event);
-})
+    // Si todo está correcto, no ponemos event.preventDefault() 
+    // y el formulario se enviará de forma nativa a tu PHP.
+});

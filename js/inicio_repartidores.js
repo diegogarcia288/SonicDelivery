@@ -1,10 +1,10 @@
-function validarInformacion(event) {
-    event.preventDefault();
+document.querySelector("form").addEventListener("submit", function(event) {  
 
     let nombre_repartidor = document.getElementById("nombre_repartidor").value.trim();
     let contraseña_repartidor = document.getElementById("contrasena_repartidor").value.trim();
 
     if (!nombre_repartidor || !contraseña_repartidor) {
+        event.preventDefault();
         Swal.fire({
             icon: "error",
             title: "No pueden haber campos vacios",
@@ -14,7 +14,7 @@ function validarInformacion(event) {
     }
 
     if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_repartidor)) {
-        console.log("nombre debe contener solo letras");
+        event.preventDefault();
         Swal.fire({
             title: "El nombre debe contener solo letras",
             icon: "error"
@@ -23,17 +23,11 @@ function validarInformacion(event) {
     }
 
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_repartidor)) {
-        console.log("La contraseña debe contener letras, números y caracteres especiales");
+        event.preventDefault();
         Swal.fire({
             title: "La contraseña debe contener letras, números y caracteres especiales",
             icon: "error"
         });
         return;
     }
-
-    console.log(
-        `Informacion del repartidor: \n${nombre_repartidor} \n${contraseña_repartidor}`
-    );
-}
-
-document.getElementById("guardar").onclick = validarInformacion;
+    })

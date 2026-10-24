@@ -1,6 +1,4 @@
-function validarInformacion(event) {
-    event.preventDefault();
-
+document.querySelector("form").addEventListener("submit", function(event) {
     let nombre_comercio = document.getElementById("nombre_comercio").value.trim();
     let nit_comercio = document.getElementById("nit_comercio").value.trim();
     let contraseña_comercio = document.getElementById("contrasena_comercio").value.trim();
@@ -8,6 +6,7 @@ function validarInformacion(event) {
     let correo_comercio = document.getElementById("correo_comercio").value.trim();
 
     if (!nombre_comercio || !nit_comercio || !contraseña_comercio || !direccion_comercio || !correo_comercio) {
+        event.preventDefault();
         Swal.fire({
             icon: "error",
             title: "No pueden haber campos vacios",
@@ -17,7 +16,7 @@ function validarInformacion(event) {
     }
 
     if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_comercio)) {
-        console.log("Nombre debe contener letras");
+        event.preventDefault();
         Swal.fire({
             title: "El nombre debe contener solo letras",
             icon: "error"
@@ -26,7 +25,7 @@ function validarInformacion(event) {
     }
 
     if (!/^\d+$/.test(nit_comercio)) {
-        console.log("NIT debe contener solo números");
+        event.preventDefault();
         Swal.fire({
             title: "El NIT debe contener solo números",
             icon: "error"
@@ -35,7 +34,7 @@ function validarInformacion(event) {
     }
 
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_comercio)) {
-        console.log("contraseña comercio debe contener letras, números y caracteres especiales");
+        event.preventDefault();
         Swal.fire({
             title: "La contraseña debe contener letras, números y caracteres especiales",
             icon: "error"
@@ -44,7 +43,7 @@ function validarInformacion(event) {
     }
 
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(direccion_comercio)) {
-        console.log("dirección comercio debe contener letras, números y caracteres especiales");
+        event.preventDefault();
         Swal.fire({
             title: "La dirección debe contener letras, números y caracteres especiales",
             icon: "error"
@@ -53,31 +52,11 @@ function validarInformacion(event) {
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo_comercio)) {
-        console.log("El correo debe contener @");
+        event.preventDefault();
         Swal.fire({
             title: "El correo debe tener un formato válido",
             icon: "error"
         });
         return;
     }
-
-    console.log(
-        `Informacion del Comercio: \n` +
-        `${nombre_comercio} \n` +
-        `${nit_comercio} \n` +
-        `${contraseña_comercio} \n` +
-        `${direccion_comercio} \n` +
-        `${correo_comercio}`
-    );
-
-    Swal.fire({
-        icon: "success",
-        title: "El admin fue registrado con éxito, BIENVENIDO.",
-        showConfirmButton: false,
-        timer: 2000
-    })
-}
-
-document.getElementById("guardar").addEventListener("click", function(Event) {
-    validarInformacion(Event);
-})
+    });

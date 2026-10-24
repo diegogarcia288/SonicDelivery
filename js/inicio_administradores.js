@@ -1,10 +1,9 @@
-function validarInformacion(event) {
-    event.preventDefault();
+document.querySelector("form").addEventListener("submit", function(event) {
+    let cedula = document.getElementById("cedula_administrador").value.trim();
+    let password = document.getElementById("contraseña_administrador").value.trim();
 
-    let nombre_administrador = document.getElementById("nombre_administrador").value.trim();
-    let contraseña_administrador = document.getElementById("contraseña_administrador").value.trim();
-
-    if (!nombre_administrador || !contraseña_administrador) {
+    if (!cedula || !password) {
+        event.preventDefault();
         Swal.fire({
             icon: "error",
             title: "No pueden haber campos vacios",
@@ -13,25 +12,12 @@ function validarInformacion(event) {
         return;
     }
 
-    if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_administrador)) {
+    if (!/^\d+$/.test(cedula)) {
+        event.preventDefault();
         Swal.fire({
-            title: "El nombre debe contener solo letras",
+            title: "La cédula debe contener solo números",
             icon: "error"
         });
         return;
     }
-
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_administrador)) {
-        Swal.fire({
-            title: "La contraseña debe contener letras, números y caracteres especiales",
-            icon: "error"
-        });
-        return;
-    }
-
-    console.log(
-        `Informacion del admin: \n${nombre_administrador} \n${contraseña_administrador}`
-    );
-}
-
-document.getElementById("guardar").onclick = validarInformacion;
+});

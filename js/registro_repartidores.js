@@ -1,6 +1,4 @@
-function validarInformacion(event) {
-    event.preventDefault();
-
+document.querySelector("form").addEventListener("submit", function(event) {
     let nombre_repartidor = document.getElementById("nombre_repartidor").value.trim();
     let contraseña_repartidor = document.getElementById("contrasena_repartidor").value.trim(); // <-- Ajustado sin eñe
     let telefono_repartidor = document.getElementById("telefono_repartidor").value.trim();
@@ -8,6 +6,7 @@ function validarInformacion(event) {
 
 
     if (!nombre_repartidor || !contraseña_repartidor || !telefono_repartidor || !cedula_repartidor) {
+        event.preventDefault();
         Swal.fire({
             icon: "error",
             title: "No pueden haber campos vacios",
@@ -17,7 +16,7 @@ function validarInformacion(event) {
     }
 
     if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$/.test(nombre_repartidor)) {
-        console.log("Nombre debe contener letras");
+        event.preventDefault();
         Swal.fire({
             title: "El nombre debe contener solo letras",
             icon: "error"
@@ -26,7 +25,7 @@ function validarInformacion(event) {
     }
 
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(contraseña_repartidor)) {
-        console.log("contraseña repartidor debe contener letras, números y caracteres especiales");
+        event.preventDefault();
         Swal.fire({
             title: "La contraseña debe contener letras, números y caracteres especiales",
             icon: "error"
@@ -35,7 +34,7 @@ function validarInformacion(event) {
     }
 
     if (!/^\d+$/.test(telefono_repartidor)) {
-        console.log("telefono debe contener solo números");
+        event.preventDefault();
         Swal.fire({
             title: "El teléfono debe contener solo números",
             icon: "error"
@@ -44,30 +43,11 @@ function validarInformacion(event) {
     }
 
     if (!/^\d+$/.test(cedula_repartidor)) {
-        console.log("cedula debe contener números");
+        event.preventDefault();
         Swal.fire({
             title: "La cédula debe contener solo números",
             icon: "error"
         });
         return;
     }
-
-    console.log(
-        `Informacion del repartidor: \n` +
-        `${nombre_repartidor} \n` +
-        `${contraseña_repartidor} \n` +
-        `${telefono_repartidor} \n` +
-        `${cedula_repartidor}`
-    );
-
-    Swal.fire({
-        icon: "success",
-        title: "El admin fue registrado con éxito, BIENVENIDO.",
-        showConfirmButton: false,
-        timer: 2000
     })
-}
-
-document.getElementById("guardar").addEventListener("click", function(Event) {
-    validarInformacion(Event);
-})
