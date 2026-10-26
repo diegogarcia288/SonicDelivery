@@ -9,17 +9,16 @@ include('conexion.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Capturamos los datos alineados con los 'name' de tu formulario HTML
-    $usuarioComercio = $_POST['Detalles'] ?? '';     // Viene del input 'nombre' (Usuario Comercio)
-    $direccionC      = $_POST['Direccion'] ?? '';  // Viene del input 'direccion'
-
-
+    $usuarioComercio = $_POST['Detalles'] ?? '';
+    $direccionC      = $_POST['Direccion'] ?? '';
+    $comercioP        = $_POST['Comercio'] ?? '';
 
     // Consulta SQL adaptada exactamente a los nombres de la estructura de tu tabla 'comercio'
-    $sql = "INSERT INTO pedido (UsuarioComercio, direccionC) VALUES (?, ?)";
+    $sql = "INSERT INTO pedido (UsuarioComercio, direccionC, ComercioP) VALUES (?, ?, ?)";
     $stmt = $conexion->prepare($sql);
     
     if ($stmt) {
-        $stmt->bind_param("ss", $usuarioComercio, $direccionC);
+        $stmt->bind_param("ss", $usuarioComercio, $direccionC, $comercioP);
         
         if ($stmt->execute()) {                                                        
             // ÉXITO: Alerta con SweetAlert y redirección
