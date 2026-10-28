@@ -14,7 +14,7 @@ function verificarEstado(estado) {
         Swal.fire({
             icon: "warning",
             title: "Alerta de Pedido",
-            text: "Este pedido ya se encuentra recogido.",
+            text: "Este pedido ya ha sido recogido.",
             showConfirmButton: true
         });
     } 
