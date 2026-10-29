@@ -39,13 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
+                    // --- GUARDAR LA SESIÓN EN EL NAVEGADOR ---
+                    localStorage.setItem('rolSonic', 'repartidor');
+                    localStorage.setItem('cedulaRepartidor', '" . $cedula . "');
+
                     Swal.fire({
                         icon: 'success',
                         title: '¡Bienvenido, Repartidor!',
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = '../repartidores/PedidosDD.html'; // Cambia esta ruta si tu panel está en otra carpeta
+                        window.location.href = '../repartidores/PedidosDD.html'; 
                     });
                 });
             </script>";
