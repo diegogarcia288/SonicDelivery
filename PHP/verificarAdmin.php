@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = '../PanelAdmin.html';
+                        window.location.href = '../administradores/PanelAdmin.html';
                     });
                 });
             </script>";

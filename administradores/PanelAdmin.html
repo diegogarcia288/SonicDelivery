@@ -7,7 +7,7 @@
   <title>🌐Sonic Delivery🌐</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/principal.css">
+  <link rel="stylesheet" href="../css/principal.css">
 
   <!--FUENTE DE LETRA-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,40 +38,17 @@
             <a class="nav-link active" href="pedidosDA.html">Pedidos Disponibles</a>
           </li>
         </ul>
+        <!-- Botón de Cerrar Sesión alineado a la derecha -->
+          <button id="btnCerrarSesion" class="btn btn-outline-danger" type="button">Cerrar Sesión</button>
       </div>
     </div>
   </nav>
 
-  <h1>Pedidos Disponibles</h1>
+  <h1>Panel de Administración</h1>
 
-  <!--VISTA PEDIDOS-->
+  <!--IMÁGEN SIMULACIÓN MAPA-->
 
-  <table class="table text-center">
-    <thead>
-      <tr>
-        <th scope="col">COMERCIO</th>
-        <th scope="col">DESTALLE</th>
-        <th scope="col">ESTADO</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>De Centro para Chipre</td>
-        <td>recogido</td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Para Palermo</td>
-        <td>entregado</td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Domicilio para la francia</td>
-        <td>pendiente</td>
-      </tr>
-    </tbody>
-  </table>
+  <img src="../imagenes/Gemini_Generated_Image_q2fivxq2fivxq2fi.jpg" class="img-fluid" alt="...">
 
   <!--FOOTER-->
 
@@ -88,15 +65,15 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
             <li class="nav-item">
-              <a class="nav-link active" href="repartidores/registroRepartidor.html">REGISTRAR DOMICILIARIOS</a>
+              <a class="nav-link active" href="../repartidores/registroRepartidor.html">REGISTRAR DOMICILIARIOS</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link active" href="comercios/registroComercio.html">REGISTRAR COMERCIOS</a>
+              <a class="nav-link active" href="../comercios/registroComercio.html">REGISTRAR COMERCIOS</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link active" href="administradores/registroAdmin.html">REGISTRAR ADMINISTRADORES</a>
+              <a class="nav-link active" href="../administradores/registroAdmin.html">REGISTRAR ADMINISTRADORES</a>
             </li>
 
           </ul>
@@ -106,7 +83,9 @@
 
   </footer>
 
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin_pedidos.js"></script>
 
 </body>
 

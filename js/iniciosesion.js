@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // --- VALIDACIÓN DE SESIÓN EXISTENTE ---
     let rolActivo = localStorage.getItem("rolSonic");
     if (rolActivo) {
-        // Si ya hay una sesión activa, redirigir automáticamente a su panel o vista principal
+        // Si ya hay una sesión activa, redirigir automáticamente a su panel principal
         redirigirAlPanel(rolActivo);
         return;
     }
@@ -32,7 +32,8 @@ document.addEventListener("DOMContentLoaded", function() {
             } else if (rolSeleccionado === "repartidor") {
                 window.location.href = "repartidores/inicioRepartidor.html";
             } else if (rolSeleccionado === "administrador") {
-                window.location.href = "admin/inicioAdmin.html"; // O tu vista actual de admin
+                // Ajustado al nombre exacto que tienes en tu carpeta de administradores
+                window.location.href = "administradores/inicioAdministrador.html";
             }
         });
     }
@@ -43,8 +44,8 @@ function redirigirAlPanel(rol) {
     if (rol === "comercio") {
         window.location.href = "comercios/RealizaP.html";
     } else if (rol === "repartidor") {
-        window.location.href = "repartidores/pedidosD.html";
+        window.location.href = "repartidores/PedidosDD.html";
     } else if (rol === "administrador") {
-        window.location.href = "admin/PanelAdmin.html";
+        window.location.href = "administradores/PanelAdmin.html";
     }
 }
