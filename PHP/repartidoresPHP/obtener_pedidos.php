@@ -1,8 +1,8 @@
 <?php
-include('conexion.php');
+include('../conexion.php');
 
 // Consultar los pedidos que estén activos (disponibles para tomar)
-$query = "SELECT * FROM pedidos WHERE estado = 'Activo' ORDER BY ID_pedido DESC";
+$query = "SELECT * FROM pedidos WHERE estado = 'Activo' ORDER BY ID_pedido ASC";
 $resultado = mysqli_query($conexion, $query);
 
 $pedidos = [];

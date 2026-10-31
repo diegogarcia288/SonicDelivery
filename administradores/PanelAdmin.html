@@ -16,13 +16,15 @@
     href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Creepster&family=Libertinus+Keyboard&family=Press+Start+2P&display=swap"
     rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
 
   <!--MENÚ DE NAVEGACIÓN-->
 
-  <nav class="navbar navbar-expand-lg navbar-custom">
+<nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">🌐SONIC DELIVERY🌐</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -38,8 +40,12 @@
             <a class="nav-link active" href="pedidosDA.html">Pedidos Disponibles</a>
           </li>
         </ul>
+
+        <!-- Aquí se pintará automáticamente "Administrador: Nombre" -->
+        <span id="infoSesion" class="navbar-text text-white fw-bold me-3"></span>
+
         <!-- Botón de Cerrar Sesión alineado a la derecha -->
-          <button id="btnCerrarSesion" class="btn btn-outline-danger" type="button">Cerrar Sesión</button>
+        <button id="btnCerrarSesion" class="btn btn-outline-danger" type="button">Cerrar Sesión</button>
       </div>
     </div>
   </nav>
@@ -86,6 +92,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/admin_pedidos.js"></script>
+  <script src="../js/sesionNavbar.js"></script>
 
 </body>
 

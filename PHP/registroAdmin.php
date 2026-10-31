@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     showConfirmButton: false,
                     timer: 2000
                 }).then(() => {
-                    window.location.href = "../administradores/inicioAdministrador.html";
+                    window.location.href = window.location.origin + "/sonic_delivery/administradores/PanelAdmin.html";
                 });
             </script>';
             exit();

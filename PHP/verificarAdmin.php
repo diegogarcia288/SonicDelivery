@@ -4,16 +4,12 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 include('conexion.php');
-// ... resto del código que te pasé antes
-
-// PHP/verificarAdmin.php
-include('conexion.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cedula = $_POST['cedula_administrador'] ?? '';
     $password = $_POST['contraseña_administrador'] ?? '';
 
-    // Validar que no estén vacíos
+    // 1. Validar que no estén vacíos
     if (empty($cedula) || empty($password)) {
         echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
         echo "<script>
@@ -28,7 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Consultar en la base de datos usando consultas preparadas para mayor seguridad
+    // 2. Validar que la cédula contenga solo números
+    if (!ctype_digit($cedula)) {
+        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Formato inválido',
+                    text: 'La cédula debe contener solo números.'
+                }).then(() => { window.history.back(); });
+            });
+        </script>";
+        exit();
+    }
+
+    // 3. Consultar en la base de datos usando consultas preparadas
     $sql = "SELECT * FROM administrador WHERE cedula = ? AND contraseña = ?";
     $stmt = $conexion->prepare($sql);
     
@@ -39,10 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Si se encuentra un registro que coincide
         if ($resultado->num_rows === 1) {
-            // Éxito: Mostramos alerta y redirigimos al panel de administración
+            $row = $resultado->fetch_assoc();
+            $nombreAdmin = $row['nombre']; // Capturamos el nombre de la columna correspondiente
+
+            // Éxito: Guardamos en localStorage, mostramos alerta y redirigimos
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
+                    localStorage.setItem('rolSonic', 'Administrador');
+                    localStorage.setItem('nombreUsuario', '" . addslashes($nombreAdmin) . "');
+
                     Swal.fire({
                         icon: 'success',
                         title: '¡Bienvenido al sistema, Administrador!',

@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 include('conexion.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Capturamos exactamente el 'UsuarioComercio' y la 'contraseña' enviados desde el formulario
+    // Capturamos usando los name exactos del HTML: 'UsuarioComercio' y 'contrasena'
     $usuario = $_POST['UsuarioComercio'] ?? '';
     $password = $_POST['contrasena'] ?? '';
 
@@ -39,13 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
+                    localStorage.setItem('rolSonic', 'comercio');
+                    localStorage.setItem('usuarioComercio', '" . $usuario . "');
+
                     Swal.fire({
                         icon: 'success',
                         title: '¡Bienvenido, Comercio!',
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = '../comercios/RealizaP.html'; // <-- Cambia aquí la ruta según necesites
+                        window.location.href = '../comercios/RealizaP.html';
                     });
                 });
             </script>";

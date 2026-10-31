@@ -6,14 +6,13 @@ error_reporting(E_ALL);
 include('conexion.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $cedula       = $_POST['cedula_repartidor'] ?? '';
-    $nombre       = $_POST['nombre_repartidor'] ?? '';
-    $password     = $_POST['contrasena_repartidor'] ?? '';
-    $telefono     = $_POST['telefono_repartidor'] ?? '';
-    $cedula_admin = $_POST['cedula_admin'] ?? '';
+    $cedula   = $_POST['cedula_administrador'] ?? '';
+    $nombre   = $_POST['nombre_administrador'] ?? '';
+    $password = $_POST['contraseña_administrador'] ?? '';
+    $telefono = $_POST['telefono_administrador'] ?? '';
 
     // 1. Validar que los campos no estén vacíos
-    if (empty($cedula) || empty($nombre) || empty($password) || empty($telefono) || empty($cedula_admin)) {
+    if (empty($cedula) || empty($nombre) || empty($password) || empty($telefono)) {
         echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
         echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -27,37 +26,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // 2. Verificar primero si la cédula del administrador existe en la base de datos
-    $sql_check = "SELECT * FROM administrador WHERE cedula = ?";
-    $stmt_check = $conexion->prepare($sql_check);
-    $stmt_check->bind_param("s", $cedula_admin);
-    $stmt_check->execute();
-    $result_check = $stmt_check->get_result();
-
-    if ($result_check->num_rows === 0) {
-        // La cédula del administrador NO existe -> Mostramos la alerta de SweetAlert
+    // 2. Validar que la cédula y el teléfono sean solo números
+    if (!ctype_digit($cedula) || !ctype_digit($telefono)) {
         echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
         echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Administrador no encontrado',
-                    text: 'Esa cédula no está asociada a un administrador.'
+                    title: 'Formato inválido',
+                    text: 'La cédula y el teléfono deben contener únicamente números.'
                 }).then(() => { window.history.back(); });
             });
         </script>";
-        $stmt_check->close();
-        $conexion->close();
         exit();
     }
-    $stmt_check->close();
 
-    // 3. Si el administrador sí existe, procedemos a registrar al repartidor
-    $sql = "INSERT INTO repartidor (CedulaR, nombre, contrasena, telefono, cedula_admin) VALUES (?, ?, ?, ?, ?)";
+    // 3. Insertar el administrador de forma segura
+    $sql = "INSERT INTO administrador (cedula, nombre, contraseña, telefono) VALUES (?, ?, ?, ?)";
     $stmt = $conexion->prepare($sql);
     
     if ($stmt) {
-        $stmt->bind_param("sssss", $cedula, $nombre, $password, $telefono, $cedula_admin);
+        $stmt->bind_param("ssss", $cedula, $nombre, $password, $telefono);
         
         if ($stmt->execute()) {
             echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
@@ -65,21 +54,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo '<script>
                 Swal.fire({
                     icon: "success",
-                    title: "¡El repartidor fue registrado con éxito, BIENVENIDO!",
+                    title: "¡El admin fue registrado con éxito, BIENVENIDO!",
                     showConfirmButton: false,
                     timer: 2000
                 }).then(() => {
-                    window.location.href = "../repartidores/inicioRepartidor.html";
+                    window.location.href = window.location.origin + "/sonic_delivery/administradores/PanelAdmin.html";
                 });
             </script>';
             exit();
         } else {
+            // Error en base de datos (por ejemplo, si la cédula ya está registrada)
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error al registrar repartidor',
+                        title: 'Error al registrar',
                         text: '" . addslashes($stmt->error) . "',
                         confirmButtonText: 'Volver'
                     }).then(() => {

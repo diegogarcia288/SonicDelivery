@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('conexion.php');
+include('../conexion.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Capturamos usando exactamente los 'name' del formulario HTML
@@ -36,12 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Si se encuentra el registro exacto
         if ($resultado->num_rows === 1) {
+            $row = $resultado->fetch_assoc();
+            $nombreRepartidor = $row['nombre']; // Asegúrate de que coincida con el nombre de la columna en tu BD
+
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     // --- GUARDAR LA SESIÓN EN EL NAVEGADOR ---
-                    localStorage.setItem('rolSonic', 'repartidor');
+                    localStorage.setItem('rolSonic', 'Repartidor');
                     localStorage.setItem('cedulaRepartidor', '" . $cedula . "');
+                    localStorage.setItem('nombreRepartidor', '" . addslashes($nombreRepartidor) . "');
 
                     Swal.fire({
                         icon: 'success',
@@ -49,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = '../repartidores/PedidosDD.html'; 
+                        window.location.href = '../../repartidores/PedidosDD.html'; 
                     });
                 });
             </script>";
