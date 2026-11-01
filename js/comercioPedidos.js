@@ -13,8 +13,6 @@ function cargarPedidosComercio() {
     }
 
     let urlPhp = '../PHP/obtener_pedidos_comercios.php'; 
-
-    // Enviamos la variable exactamente como 'comercioP' que es la que el PHP está esperando
     let datosComercio = `comercioP=${encodeURIComponent(nombreComercio)}`;
 
     fetch(urlPhp, {
@@ -73,6 +71,42 @@ function cargarPedidosComercio() {
         contenedor.innerHTML = `<p class="text-danger">Error al procesar los datos del servidor.</p>`;
     });
 }
+
+// Evento de cierre de sesión con SweetAlert2 optimizado
+document.addEventListener("click", function(event) {
+    let botonCerrar = event.target.closest("#btnCerrarSesion");
+
+    if (botonCerrar) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: '¿Cerrar sesión?',
+            text: '¿Estás seguro de que deseas salir?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, salir',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Limpieza del almacenamiento local
+                localStorage.clear();
+
+                Swal.fire({
+                    title: '¡Sesión Cerrada!',
+                    text: 'Has salido del sistema correctamente.',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    // Redirección directa adaptada a la estructura de carpetas
+                    window.location.href = "../iniciosesion.html";
+                });
+            }
+        });
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     cargarPedidosComercio();

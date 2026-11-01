@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🌐Sonic Delivery🌐</title>
+  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="../css/principal.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <!--FUENTE DE LETRA-->
+  <!-- FUENTE DE LETRA -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Creepster&family=Libertinus+Keyboard&family=Press+Start+2P&display=swap"
     rel="stylesheet">
-
 </head>
 
 <body>
 
-  <!--MENÚ DE NAVEGACIÓN-->
-
-  <nav class="navbar navbar-expand-lg navbar-custom">
+  <!-- MENÚ DE NAVEGACIÓN -->
+  <nav class="navbar navbar-expand-lg navbar-custom flex-shrink-0">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">🌐SONIC DELIVERY🌐</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -37,7 +39,7 @@
           </li>
         </ul>
 
-                <!-- Aquí se pintará automáticamente "Administrador: Nombre" -->
+        <!-- Aquí se pintará automáticamente "Administrador: Nombre" -->
         <span id="infoSesion" class="navbar-text text-white fw-bold me-3"></span>
 
         <!-- Botón de Cerrar Sesión alineado a la derecha -->
@@ -46,53 +48,50 @@
     </div>
   </nav>
 
-  <h1>Realizar un Pedido</h1>
+  <!-- TÍTULO H1 DE EXTREMO A EXTREMO CON ESPACIADO SIMÉTRICO -->
+  <h1 class="mt-3 mb-3 py-2 fs-3 w-100 text-center">Realizar un Pedido</h1>
 
-  <!--FORMULARIO DE PEDIDO-->
+  <!-- FORMULARIO DE PEDIDO CONTENIDO -->
+  <div class="main-content container-fluid px-4">
+    <form action="../PHP/registroPedido.php" method="post" class="p-4 rounded shadow">
+      <div class="mb-3">
+        <label class="form-label fw-bold text-white">Detalles</label>
+        <input type="text" class="form-control" id="Detalles" name="Detalles" placeholder="Opcional llenar">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold text-white">Dirección</label>
+        <input type="text" class="form-control" id="Direccion" name="Direccion">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold text-white">Comercio</label>
+        <input type="text" class="form-control" id="Comercio" name="Comercio">
+      </div>
+      <button type="submit" id="guardar" class="btn btn-dark w-100 mt-2">Enviar</button>
+    </form>
+  </div>
 
-  <form action="../PHP/registroPedido.php" method="post">
-    <div class="mb-3">
-      <label class="form-label m-3">Detalles</label>
-      <input type="text" class="form-control" id="Detalles" name="Detalles" placeholder="Opcional llenar">
-    </div>
-    <div class="mb-3">
-      <label class="form-label m-3">Dirección</label>
-      <input type="text" class="form-control" id="Direccion" name="Direccion">
-    </div>
-    <div class="mb-3">
-      <label class="form-label m-3">Comercio</label>
-      <input type="text" class="form-control" id="Comercio" name="Comercio">
-    </div>
-    <button type="submit" id="guardar" class="btn btn-primary m-3">Enviar</button>
-  </form>
-
+  <!-- FOOTER PEGADO TOTALMENTE ABAJO -->
   <footer>
-
-    <nav class="navbar navbar-expand-lg navbar-custom">
+    <nav class="navbar navbar-expand-lg navbar-custom m-0 py-1">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">🌐SONIC DELIVERY🌐</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand fs-6" href="#">🌐SONIC DELIVERY🌐</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#footerNav"
+          aria-controls="footerNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-            <li class="nav-item">
-              <article> EN CASO DE UN PROBLEMA CON TU PEDIDO, POR FAVOR CONTACTA A NUESTRO SOPORTE </article>
-              <article> 📞 : 3135502066 </article>
+        <div class="collapse navbar-collapse" id="footerNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
+            <li class="nav-item text-white px-2 small">
+              <span class="fw-bold">EN CASO DE UN PROBLEMA CON TU PEDIDO, POR FAVOR CONTACTA A NUESTRO SOPORTE</span> | 📞 : 3135502066
             </li>
-
           </ul>
         </div>
       </div>
     </nav>
-
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="../js/pedidosajax.js"></script>
+  <script src="../js/comercioPedidos.js"></script>
   <script src="../js/sesionNavbar.js"></script>
 
 </body>
