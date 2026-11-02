@@ -4,18 +4,16 @@ function cargarPedidosDisponibles() {
     let contenedor = document.getElementById('lista-pedidos');
     if (!contenedor) return;
 
-    // Validación estricta de sesión: Si no hay cédula, muestra el mensaje y detiene todo
     let cedulaRepartidor = localStorage.getItem('cedulaRepartidor');
     if (!cedulaRepartidor) {
         contenedor.innerHTML = `<p class="text-danger">No se encontró la sesión del repartidor. Por favor, inicia sesión nuevamente.</p>`;
         return;
     }
 
-    // Ruta de la subcarpeta repartidoresPHP
-    fetch('../PHP/repartidoresPHP/obtener_pedidos.php')
+    fetch(window.location.origin + '/sonic_delivery/PHP/repartidoresPHP/obtener_pedidos.php')
         .then(response => response.json())
         .then(data => {
-            if (data.length === 0) {
+            if (!Array.isArray(data) || data.length === 0) {
                 contenedor.innerHTML = '<p class="text-muted">No hay pedidos disponibles en este momento.</p>';
                 return;
             }
@@ -58,56 +56,10 @@ function cargarPedidosDisponibles() {
             html += `</tbody></table></div>`;
             contenedor.innerHTML = html;
         })
-        .catch(error => console.error('Error al actualizar los pedidos:', error));
-}
-
-// ==========================================
-// FUNCIÓN PARA CAMBIAR DISPONIBILIDAD
-// ==========================================
-function cambiarDisponibilidad(estadoAccion) {
-    let cedulaRepartidor = localStorage.getItem("cedulaRepartidor");
-
-    if (!cedulaRepartidor) {
-        Swal.fire("Error", "No se encontró la cédula en la sesión. Inicia sesión nuevamente.", "error");
-        return;
-    }
-
-    let estadoBD = (estadoAccion === 'activo') ? 'Activo' : 'Inactivo';
-
-    fetch("../PHP/repartidoresPHP/actualizarestado.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `cedula=${cedulaRepartidor}&estado=${estadoBD}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.exito) {
-            localStorage.setItem("estadoRepartidor", estadoAccion);
-
-            if (estadoAccion === 'activo') {
-                Swal.fire({
-                    icon: "success",
-                    title: "¡Conectado!",
-                    text: "Ahora estás activo para recibir nuevos pedidos.",
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            } else {
-                Swal.fire({
-                    icon: "info",
-                    title: "¡Desconectado!",
-                    text: "Te has desactivado. Ya no podrás tomar pedidos hasta conectarte.",
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            }
-        } else {
-            Swal.fire("Error", data.mensaje, "error");
-        }
-    })
-    .catch(error => console.error("Error al cambiar estado:", error));
+        .catch(error => {
+            console.error('Error al actualizar los pedidos:', error);
+            contenedor.innerHTML = `<p class="text-danger text-center">Error al conectar con el servidor.</p>`;
+        });
 }
 
 // ==========================================
@@ -116,8 +68,10 @@ function cambiarDisponibilidad(estadoAccion) {
 document.addEventListener("click", function(event) {
     if (event.target.classList.contains("btn-tomar-pedido")) {
         
-        let estadoActual = localStorage.getItem("estadoRepartidor");
-        if (estadoActual !== 'activo') {
+        // Validación estricta: consultamos el estado real del localStorage sin autodefinirlo
+        let estadoActual = localStorage.getItem("estadoRepartidor") || "";
+
+        if (estadoActual.toLowerCase() !== 'activo') {
             Swal.fire({
                 icon: "warning",
                 title: "Acción Denegada",
@@ -135,7 +89,7 @@ document.addEventListener("click", function(event) {
             return;
         }
 
-        fetch("../PHP/repartidoresPHP/asignarPedido.php", {
+        fetch(window.location.origin + "/sonic_delivery/PHP/repartidoresPHP/asignarPedido.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -158,7 +112,7 @@ document.addEventListener("click", function(event) {
                 Swal.fire("Error", data.mensaje, "error");
             }
         })
-        .catch(error => console.error("Error:", error));
+        .catch(error => console.error("Error al asignar:", error));
     }
 });
 

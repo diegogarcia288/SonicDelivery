@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('conexion.php');
+include('../conexion.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Capturamos usando los name exactos del HTML: 'UsuarioComercio' y 'contrasena'
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = '../comercios/RealizaP.html';
+                        window.location.href = window.location.origin + '/sonic_delivery/comercios/RealizaP.html';
                     });
                 });
             </script>";

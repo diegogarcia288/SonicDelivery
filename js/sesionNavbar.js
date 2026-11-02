@@ -7,13 +7,13 @@ document.addEventListener("DOMContentLoaded", function() {
         spanSesion.textContent = `${rol}: ${nombre}`;
     }
 
-    // Vinculación directa al botón por su ID
     let btnCerrar = document.getElementById("btnCerrarSesion");
     if (btnCerrar) {
-        // Removemos listeners previos clonando el nodo si fuera necesario, y agregamos el click
         btnCerrar.addEventListener("click", function(event) {
             event.preventDefault();
-            event.stopPropagation(); // Evita que otro script capture el evento
+            event.stopPropagation();
+
+            let cedulaRepartidor = localStorage.getItem('cedulaRepartidor') || localStorage.getItem('cedula') || localStorage.getItem('CedulaR');
 
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
@@ -27,31 +27,40 @@ document.addEventListener("DOMContentLoaded", function() {
                     cancelButtonColor: "#d33"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        ejecutarCierreSesion();
+                        ejecutarCierreSesion(cedulaRepartidor);
                     }
                 });
             } else {
-                // Alerta nativa de respaldo por si SweetAlert no cargara
                 if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
-                    ejecutarCierreSesion();
+                    ejecutarCierreSesion(cedulaRepartidor);
                 }
             }
         });
-    } else {
-        console.warn("No se encontró el botón #btnCerrarSesion en esta vista.");
     }
 });
 
-function ejecutarCierreSesion() {
-    // Limpieza total del almacenamiento local
-    localStorage.removeItem('rolSonic');
-    localStorage.removeItem('nombreUsuario');
-    localStorage.removeItem('usuarioComercio');
-    localStorage.removeItem('nombreRepartidor');
-    localStorage.removeItem('cedulaRepartidor');
-    localStorage.removeItem('estadoRepartidor');
+async function ejecutarCierreSesion(cedulaRepartidor) {
+    if (cedulaRepartidor) {
+        try {
+            console.log("Enviando estado Inactivo para la cédula:", cedulaRepartidor);
+            
+            // Hacemos el fetch de manera síncrona esperando la respuesta del servidor
+            let response = await fetch(window.location.origin + "/sonic_delivery/PHP/repartidoresPHP/actualizarestado.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `cedula=${cedulaRepartidor}&estado=Inactivo`
+            });
+
+            let data = await response.json();
+            console.log("Respuesta del servidor PHP:", data);
+        } catch (error) {
+            console.error("Error al actualizar el estado en el servidor:", error);
+        }
+    }
+
+    // Una vez que el servidor responde (o si falló la red), limpiamos la sesión y salimos de forma segura
     localStorage.clear(); 
-    
-    // Redirección absoluta asegurada al login principal en la raíz
     window.location.href = window.location.origin + "/sonic_delivery/iniciosesion.html";
 }

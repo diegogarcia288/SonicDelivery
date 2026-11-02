@@ -4,53 +4,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INICIO REPARTIDORES-SONIC DELIVERY</title>
-  <link rel="stylesheet" href="../css/registro.css">
+  <title>INICIO REPARTIDORES - SONIC DELIVERY</title>
+  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/registro.css">
 </head>
 
 <body>
 
-  <div class="card mb-3" style="max-width: 540px;">
-    <div class="row g-0">
-      <div class="col-md-4">
-        <img src="../imagenes/sonic logo.jpeg" class="img-fluid rounded-start" alt="...">
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title">INGRESA REPARTIDOR</h5>
-
-          <div class="formulario">
-            <form action="../PHP/repartidoresPHP/verificarRepartidor.php" method="POST">
-              <div class="name">
-                <input type="text" id="cedula_repartidor" name="cedula_repartidor" placeholder="Cédula">
-                <label>CÉDULA REPARTIDOR</label>
-              </div>
-
-              <div class="contrasena">
-                <input type="password" id="contrasena_repartidor" name="contrasena_repartidor" placeholder="Contraseña">
-                <label>CONTRASEÑA REPARTIDOR</label>
-              </div>
-
-              <div class="rein">
-                <button type="submit" class="btn btn-primary">INICIAR SESIÓN</button>
-              </div>
-
-              <div class="rein">
-              <a href="../iniciosesion.html" class="btn btn-primary">VOLVER</a>
-              </div>
-
-            </form>
-          </div>
-
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg mx-auto" style="max-width: 650px; width: 100%;">
+      <div class="row g-0 align-items-center">
+        
+        <!-- Logo -->
+        <div class="col-md-5 text-center p-3">
+          <img src="../imagenes/sonic logo.jpeg" class="img-fluid" alt="Logo Sonic Delivery">
         </div>
+
+        <!-- Formulario -->
+        <div class="col-md-7">
+          <div class="card-body">
+            <h4 class="card-title">INGRESA REPARTIDOR</h4>
+
+            <div class="formulario">
+              <form action="../PHP/repartidoresPHP/verificarRepartidor.php" method="POST">
+
+                <div class="mb-3">
+                  <label for="cedula_repartidor" class="form-label">CÉDULA REPARTIDOR</label>
+                  <input type="text" class="form-control" id="cedula_repartidor" name="cedula_repartidor"
+                    placeholder="Ingresa tu cédula" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="contrasena_repartidor" class="form-label">CONTRASEÑA REPARTIDOR</label>
+                  <input type="password" class="form-control" id="contrasena_repartidor" name="contrasena_repartidor"
+                    placeholder="Ingresa tu contraseña" required>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                  <button type="submit" class="btn btn-primary">INICIAR SESIÓN</button>
+                  <a href="../iniciosesion.html" class="btn btn-secondary">VOLVER</a>
+                </div>
+
+              </form>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
 </body>
 

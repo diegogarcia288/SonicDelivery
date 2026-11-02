@@ -1,7 +1,8 @@
-console.log("¡El archivo JS de administración de pedidos está cargado y activo!");
+console.log("¡pedidosDisponiblesAdmin.js cargado correctamente!");
 
 function cargarTodosLosPedidosAdmin() {
-    fetch('../PHP/obtener_pedidos_admin.php')
+    // Usamos la ruta absoluta exacta apuntando a la subcarpeta administradorPHP
+    fetch(window.location.origin + '/sonic_delivery/PHP/administradorPHP/obtener_pedidos_admin.php')
         .then(response => response.json())
         .then(data => {
             let contenedor = document.getElementById('lista-pedidos');
@@ -12,7 +13,6 @@ function cargarTodosLosPedidosAdmin() {
                 return;
             }
 
-            // Estructura de tabla idéntica y profesional
             let html = `
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered align-middle">
@@ -31,7 +31,7 @@ function cargarTodosLosPedidosAdmin() {
             `;
 
             data.forEach(pedido => {
-                let esAsignado = pedido.estado && pedido.estado.toLowerCase() === 'asignado' || pedido.CedulaR !== null;
+                let esAsignado = (pedido.estado && pedido.estado.toLowerCase() === 'asignado') || pedido.CedulaR !== null;
                 
                 let badgeEstado = esAsignado 
                     ? `<span class="badge bg-warning text-dark">${pedido.estado || 'Asignado'}</span>` 
@@ -63,11 +63,17 @@ function cargarTodosLosPedidosAdmin() {
             html += `</tbody></table></div>`;
             contenedor.innerHTML = html;
         })
-        .catch(error => console.error('Error al actualizar los pedidos del admin:', error));
+        .catch(error => {
+            console.error('Error al actualizar los pedidos del admin:', error);
+            let contenedor = document.getElementById('lista-pedidos');
+            if (contenedor) {
+                contenedor.innerHTML = `<p class="text-danger text-center">Error al conectar con el servidor.</p>`;
+            }
+        });
 }
 
 // ==========================================
-// FUNCIÓN Y LISTENER PARA CERRAR SESIÓN (SEGURO Y CON CONFIRMACIÓN)
+// FUNCIÓN Y LISTENER PARA CERRAR SESIÓN
 // ==========================================
 document.addEventListener("click", function(event) {
     let botonCerrar = event.target.closest("#btnCerrarSesion");
@@ -75,7 +81,6 @@ document.addEventListener("click", function(event) {
     if (botonCerrar) {
         event.preventDefault();
 
-        // Ventana de confirmación SweetAlert2
         Swal.fire({
             title: '¿Cerrar sesión?',
             text: '¿Estás seguro de que deseas salir?',
@@ -87,7 +92,6 @@ document.addEventListener("click", function(event) {
             cancelButtonColor: '#d33'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Limpieza de sesión
                 localStorage.clear();
 
                 if (typeof Swal !== 'undefined') {
@@ -109,14 +113,13 @@ document.addEventListener("click", function(event) {
 });
 
 function redireccionarLogin() {
-    // Como las vistas de administrador están en la subcarpeta administradores/, 
-    // necesitamos subir un nivel (../) o usar la ruta absoluta del servidor.
     window.location.href = window.location.origin + "/sonic_delivery/iniciosesion.html";
 }
 
+// Ejecutar al cargar la página y refrescar cada 4 segundos
 document.addEventListener('DOMContentLoaded', () => {
     cargarTodosLosPedidosAdmin();
     setInterval(cargarTodosLosPedidosAdmin, 4000);
 });
 
-console.log("¡admin_pedidos.js se cargó por completo en el Panel Admin!");
+console.log("¡Script del Panel Admin de pedidos inicializado correctamente!");

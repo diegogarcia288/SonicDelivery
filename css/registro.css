@@ -1,32 +1,36 @@
-body{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-
-  background: linear-gradient(rgb(33, 130, 187), rgb(31, 90, 216), rgb(236, 196, 18));
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-/**CARD**/
-
+/** CARD **/
 body .card {
-    border: none;
-    background: linear-gradient(rgb(33, 130, 187), rgb(31, 90, 216), rgb(236, 196, 18));
+    border: 1px solid rgba(255, 255, 255, 0.15); /* Borde sutil brillante */
+    background: rgba(30, 41, 59, 0.85); /* Fondo azul oscuro translúcido que se funde con el exterior */
+    backdrop-filter: blur(12px); /* Efecto vidrio esmerilado */
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5) !important;
 }
 
-.card-title{
-    font-weight: bold;
-    color: white;
+.card-title {
+    font-weight: 700;
+    color: #ffffff; /* Título en blanco brillante */
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
 }
 
 body .card img {
     width: 100%;
     height: 100%;
     display: block;
-    border-radius: 15px;
+    border-radius: 12px;
     object-fit: contain;
 }
 
@@ -35,36 +39,58 @@ body .card-body {
     flex-direction: column;
     justify-content: center; 
     height: 100%;
-    padding: 2%;
-    background: linear-gradient(rgb(33, 130, 187), rgb(31, 90, 216), rgb(236, 196, 18));
+    padding: 2rem;
+    background: transparent;
 }
 
 /* FORMULARIO */
+.formulario {
+    margin: 0;
+}
 
 .formulario label {
-    color: white;
+    color: #cbd5e1; /* Texto claro y legible para las etiquetas */
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
 }
 
-.formulario input{
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 0px;
+.formulario input, 
+.formulario select {
+    background-color: rgba(15, 23, 42, 0.6); /* Fondo semitransparente para los inputs */
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    padding: 10px;
+    padding: 12px;
+    color: #ffffff; /* Texto blanco al escribir */
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
 }
 
-.formulario{
-    margin-bottom: 15px;
-    margin: 50px;
+/* Opciones del select legibles en fondo oscuro */
+.formulario select option {
+    background-color: #1e293b;
+    color: #ffffff;
 }
 
-.formulario a{
-    color: rgb(0, 68, 255);
+.formulario input:focus, 
+.formulario select:focus {
+    background-color: rgba(15, 23, 42, 0.9);
+    border-color: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+}
+
+.formulario a {
+    color: #60a5fa;
     text-decoration: none;
 }
 
-.formulario .rein button input{
-    border: 100px;
-    border-radius: 10px;
+.formulario a:hover {
+    text-decoration: underline;
+}
+
+.formulario .d-grid button {
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 8px;
 }

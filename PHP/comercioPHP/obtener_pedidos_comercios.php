@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include('conexion.php'); // Asegúrate de que la ruta a tu conexión sea correcta
+include('../conexion.php'); // Asegúrate de que la ruta a tu conexión sea correcta
 
 // Verificamos si se recibió el comercio por POST (o GET)
 $comercio = isset($_POST['comercioP']) ? $_POST['comercioP'] : '';

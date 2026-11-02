@@ -3,7 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('conexion.php');
+// Subimos un nivel desde administradorPHP para encontrar conexion.php
+include('../conexion.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cedula = $_POST['cedula_administrador'] ?? '';
@@ -51,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Si se encuentra un registro que coincide
         if ($resultado->num_rows === 1) {
             $row = $resultado->fetch_assoc();
-            $nombreAdmin = $row['nombre']; // Capturamos el nombre de la columna correspondiente
+            $nombreAdmin = $row['nombre'];
 
-            // Éxito: Guardamos en localStorage, mostramos alerta y redirigimos
+            // Éxito: Guardamos en localStorage, mostramos alerta y redirigimos (con comillas corregidas)
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
@@ -66,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = '../administradores/PanelAdmin.html';
+                        window.location.href = window.location.origin + '/sonic_delivery/administradores/PanelAdmin.html';
                     });
                 });
             </script>";

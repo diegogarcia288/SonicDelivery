@@ -1,9 +1,72 @@
 document.addEventListener("DOMContentLoaded", function() {
     
+    // --- LÓGICA DEL FORMULARIO DE LOGIN / ENVÍO DE CREDENCIALES ---
+    const formLogin = document.getElementById("formLogin"); // Asegúrate de que el formulario tenga este ID o ajústalo al que uses
+
+    if (formLogin) {
+        formLogin.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            let rolActivo = localStorage.getItem("rolSonic") || document.getElementById("rolSelect").value;
+            let cedula = document.getElementById("cedula").value; // O el campo de usuario correspondiente
+            let password = document.getElementById("password").value;
+
+            // Determinar a qué archivo PHP apuntar según el rol
+            let urlDestino = "";
+            if (rolSeleccionado === "administrador") {
+                // Ruta absoluta corregida apuntando a administradorPHP
+                urlDestino = window.location.origin + '/sonic_delivery/PHP/administradorPHP/verificarAdmin.php';
+            } else if (rolSeleccionado === "comercio") {
+                urlDestino = window.location.origin + '/sonic_delivery/PHP/comercioPHP/verificarComercio.php'; // Ajusta si aplica
+            } else if (rolSeleccionado === "repartidor") {
+                urlDestino = window.location.origin + '/sonic_delivery/PHP/repartidoresPHP/verificarRepartidor.php'; // Ajusta si aplica
+            }
+
+            // Petición de verificación al servidor
+            fetch(urlDestino, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `cedula=${encodeURIComponent(cedula)}&password=${encodeURIComponent(password)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem("rolSonic", rolSeleccionado);
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Bienvenido!',
+                        text: 'Has iniciado sesión correctamente.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        redirigirAlPanel(rolSeleccionado);
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de acceso',
+                        text: data.message || 'Credenciales incorrectas.',
+                        confirmButtonText: 'Intentar de nuevo'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error en la autenticación:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'No se pudo conectar con el servidor.',
+                    confirmButtonText: 'Entendido'
+                });
+            });
+        });
+    }
+
     // --- VALIDACIÓN DE SESIÓN EXISTENTE ---
     let rolActivo = localStorage.getItem("rolSonic");
-    if (rolActivo) {
-        // Si ya hay una sesión activa, redirigir automáticamente a su panel principal
+    if (rolActivo && window.location.pathname.includes("iniciosesion.html")) {
         redirigirAlPanel(rolActivo);
         return;
     }
@@ -13,9 +76,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (btnContinuar) {
         btnContinuar.addEventListener("click", function() {
-            let rolSeleccionado = document.getElementById("rolSelect").value;
+            let rolSelect = document.getElementById("rolSelect");
+            let rolSeleccionado = rolSelect ? rolSelect.value : "";
 
-            // Validar que se haya seleccionado una opción
             if (!rolSeleccionado) {
                 Swal.fire({
                     icon: "warning",
@@ -26,13 +89,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
-            // Redirigir a la respectiva página de inicio de sesión según el rol
             if (rolSeleccionado === "comercio") {
                 window.location.href = "comercios/inicioComercio.html";
             } else if (rolSeleccionado === "repartidor") {
                 window.location.href = "repartidores/inicioRepartidor.html";
             } else if (rolSeleccionado === "administrador") {
-                // Ajustado al nombre exacto que tienes en tu carpeta de administradores
                 window.location.href = "administradores/inicioAdministrador.html";
             }
         });
@@ -42,10 +103,10 @@ document.addEventListener("DOMContentLoaded", function() {
 // Función auxiliar para redirigir si la sesión ya está activa
 function redirigirAlPanel(rol) {
     if (rol === "comercio") {
-        window.location.href = "comercios/RealizaP.html";
+        window.location.href = window.location.origin + "/sonic_delivery/comercios/RealizaP.html";
     } else if (rol === "repartidor") {
-        window.location.href = "repartidores/PedidosDD.html";
+        window.location.href = window.location.origin + "/sonic_delivery/repartidores/PedidosDD.html";
     } else if (rol === "administrador") {
-        window.location.href = "administradores/PanelAdmin.html";
+        window.location.href = window.location.origin + "/sonic_delivery/administradores/PanelAdmin.html";
     }
 }

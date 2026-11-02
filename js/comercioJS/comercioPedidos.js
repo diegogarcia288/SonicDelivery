@@ -12,7 +12,8 @@ function cargarPedidosComercio() {
         return;
     }
 
-    let urlPhp = '../PHP/obtener_pedidos_comercios.php'; 
+    // Ruta absoluta asegurada para evitar errores 404 desde la subcarpeta comercios
+    let urlPhp = window.location.origin + '/sonic_delivery/PHP/comercioPHP/obtener_pedidos_comercios.php'; 
     let datosComercio = `comercioP=${encodeURIComponent(nombreComercio)}`;
 
     fetch(urlPhp, {
@@ -101,7 +102,7 @@ document.addEventListener("click", function(event) {
                     showConfirmButton: false
                 }).then(() => {
                     // Redirección directa adaptada a la estructura de carpetas
-                    window.location.href = "../iniciosesion.html";
+                    window.location.href = window.location.origin + "/sonic_delivery/iniciosesion.html";
                 });
             }
         });
