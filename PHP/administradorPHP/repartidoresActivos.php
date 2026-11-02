@@ -28,8 +28,8 @@ if ($resultado) {
         $cedula = $row['id'];
         $total_pedidos = 0;
 
-        // 2. Contar los pedidos asignados a este repartidor usando CedulaR y el estado 'Asignado'
-        $sql_pedidos = "SELECT COUNT(*) as total FROM pedidos WHERE CedulaR = '$cedula' AND estado = 'Asignado'";
+        // 2. Contar los pedidos en curso (Asignados o Recogidos) para este repartidor
+        $sql_pedidos = "SELECT COUNT(*) as total FROM pedidos WHERE CedulaR = '$cedula' AND estado IN ('Asignado', 'Recogido')";
         $res_ped = $conexion->query($sql_pedidos);
         
         if ($res_ped) {

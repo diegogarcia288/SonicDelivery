@@ -13,6 +13,17 @@ function cargarTodosLosPedidosAdmin() {
                 return;
             }
 
+            // FILTRADO POR EXCLUSIÓN: Ocultar estrictamente los que ya fueron recogidos o entregados
+            let pedidosDisponibles = data.filter(pedido => {
+                let estado = pedido.estado ? pedido.estado.toLowerCase().trim() : '';
+                return estado !== 'recogido' && estado !== 'entregado';
+            });
+
+            if (pedidosDisponibles.length === 0) {
+                contenedor.innerHTML = '<p class="text-muted">No hay pedidos disponibles o asignados en este momento.</p>';
+                return;
+            }
+
             let html = `
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered align-middle">
@@ -24,26 +35,27 @@ function cargarTodosLosPedidosAdmin() {
                                 <th>Dirección</th>
                                 <th>Estado</th>
                                 <th>Repartidor Asignado</th>
-                                <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
             `;
 
-            data.forEach(pedido => {
-                let esAsignado = (pedido.estado && pedido.estado.toLowerCase() === 'asignado') || pedido.CedulaR !== null;
-                
-                let badgeEstado = esAsignado 
-                    ? `<span class="badge bg-warning text-dark">${pedido.estado || 'Asignado'}</span>` 
-                    : `<span class="badge bg-success">${pedido.estado || 'Activo'}</span>`;
+            pedidosDisponibles.forEach(pedido => {
+                let estadoActual = pedido.estado ? pedido.estado.trim() : 'Activo';
+                let estadoLower = estadoActual.toLowerCase();
 
-                let infoRepartidor = esAsignado && pedido.CedulaR 
+                // Definir colores de badges
+                let claseBadge = 'bg-success'; // Para Activo / sin estado
+                if (estadoLower === 'asignado') {
+                    claseBadge = 'bg-info text-dark';
+                }
+
+                let badgeEstado = `<span class="badge ${claseBadge}">${estadoActual}</span>`;
+
+                // Mostrar info del repartidor si tiene cédula asociada
+                let infoRepartidor = pedido.CedulaR 
                     ? `${pedido.nombreRepartidor || 'Sin nombre'} <br><small class="text-muted">(Cédula: ${pedido.CedulaR})</small>` 
                     : `<span class="text-muted">Pendiente de tomar</span>`;
-
-                let botonAccion = !esAsignado 
-                    ? `<button class="btn btn-secondary btn-sm" disabled>Disponible</button>` 
-                    : `<button class="btn btn-info btn-sm text-white" disabled>En curso</button>`;
 
                 let idPedido = pedido.ID_pedido || pedido.id_pedido || '';
 
@@ -55,7 +67,6 @@ function cargarTodosLosPedidosAdmin() {
                         <td>${pedido.direccion || ''}</td>
                         <td>${badgeEstado}</td>
                         <td>${infoRepartidor}</td>
-                        <td>${botonAccion}</td>
                     </tr>
                 `;
             });

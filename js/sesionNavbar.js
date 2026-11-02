@@ -3,8 +3,9 @@ document.addEventListener("DOMContentLoaded", function() {
     let nombre = localStorage.getItem('nombreUsuario') || localStorage.getItem('usuarioComercio') || localStorage.getItem('nombreRepartidor');
     let spanSesion = document.getElementById("infoSesion");
 
-    if (rol && nombre && spanSesion) {
-        spanSesion.textContent = `${rol}: ${nombre}`;
+    // AQUÍ EL CAMBIO: Asignamos únicamente el nombre limpio, sin repetir "Rol:"
+    if (nombre && spanSesion) {
+        spanSesion.textContent = nombre;
     }
 
     let btnCerrar = document.getElementById("btnCerrarSesion");
@@ -42,9 +43,6 @@ document.addEventListener("DOMContentLoaded", function() {
 async function ejecutarCierreSesion(cedulaRepartidor) {
     if (cedulaRepartidor) {
         try {
-            console.log("Enviando estado Inactivo para la cédula:", cedulaRepartidor);
-            
-            // Hacemos el fetch de manera síncrona esperando la respuesta del servidor
             let response = await fetch(window.location.origin + "/sonic_delivery/PHP/repartidoresPHP/actualizarestado.php", {
                 method: "POST",
                 headers: {
@@ -60,7 +58,6 @@ async function ejecutarCierreSesion(cedulaRepartidor) {
         }
     }
 
-    // Una vez que el servidor responde (o si falló la red), limpiamos la sesión y salimos de forma segura
     localStorage.clear(); 
     window.location.href = window.location.origin + "/sonic_delivery/iniciosesion.html";
 }

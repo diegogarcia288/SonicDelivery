@@ -43,37 +43,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // 3. Consulta SQL segura para insertar el comercio
+    // 3. Consulta SQL segura para insertar el comercio protegida con try-catch
     $sql = "INSERT INTO comercio (UsuarioComercio, direccionC, emailC, contraseña) VALUES (?, ?, ?, ?)";
     $stmt = $conexion->prepare($sql);
     
     if ($stmt) {
         $stmt->bind_param("ssss", $usuarioComercio, $direccionC, $emailC, $password);
         
-        if ($stmt->execute()) {
-            // ÉXITO: Alerta con SweetAlert y redirección que ya te funciona
-            echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-            echo '<body style="background-color: #f8f9fa;"></body>';
-            echo '<script>
-                Swal.fire({
-                    icon: "success",
-                    title: "¡El comercio fue registrado con éxito, BIENVENIDO!",
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    window.location.href = window.location.origin + "/sonic_delivery/administradores/PanelAdmin.html";
-                });
-            </script>';
-            exit();
-        } else {
-            // Error (por ejemplo, si el nombre del comercio ya existe porque es clave primaria)
+        try {
+            if ($stmt->execute()) {
+                // ÉXITO: Alerta con SweetAlert y redirección
+                echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+                echo '<body style="background-color: #f8f9fa;"></body>';
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡El comercio fue registrado con éxito, BIENVENIDO!",
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => {
+                        window.location.href = window.location.origin + "/sonic_delivery/administradores/PanelAdmin.html";
+                    });
+                </script>';
+                exit();
+            }
+        } catch (mysqli_sql_exception $e) {
+            // Capturamos el error de duplicidad (1062) para mostrar la alerta personalizada
+            $mensajeError = ($e->getCode() === 1062) 
+                ? "Ya existe un comercio registrado con el usuario '" . addslashes($usuarioComercio) . "'." 
+                : "Error en la base de datos: " . $e->getMessage();
+
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Error al registrar comercio',
-                        text: '" . addslashes($stmt->error) . "',
+                        icon: 'warning',
+                        title: '¡Comercio ya registrado!',
+                        text: '" . addslashes($mensajeError) . "',
                         confirmButtonText: 'Volver'
                     }).then(() => {
                         window.history.back();
