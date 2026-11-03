@@ -3,90 +3,134 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: rgb(24, 110, 160);
     background-image: url(../imagenes/sonic\ logo.jpeg);
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: 100%;
-}  
+    background-size: cover; 
+} 
 
 /* Contenedor principal flexible para las vistas */
 .main-content {
-    flex: 1;
+    min-height: 75vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    padding-top: 0rem;
-    padding-bottom: 1rem;
+    padding: 0.5rem;
 }
 
-        /** FUENTE DE LETRA **/
-
-.navbar-custom .container-fluid .navbar-brand{
+/** FUENTE DE LETRA **/
+.navbar-custom .container-fluid .navbar-brand {
   font-family: "Archivo Black", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
-.navbar-nav{
+.navbar-nav {
     font-family: "Archivo Black";
 }
 
-.navbar-custom{
+.navbar-custom {
     background-color: rgb(36, 171, 248);
     padding: 10px;
 }
 
-/* TÍTULO H1: De extremo a extremo con espaciados simétricos */
-h1{
-    margin-top: 15px !important;    
-    margin-bottom: 15px !important; 
+/* TÍTULO H1: Adaptable a pantallas pequeñas */
+h1 {
+    margin-top: 10px !important;    
+    margin-bottom: 10px !important; 
     text-align: center;
     font-family: "Archivo Black", sans-serif;
     font-weight: 400;
     font-style: normal;
     border-style: solid;
-    border-width: 7px;
+    border-width: 5px;
     border-color: rgb(18, 79, 114);
     background-color: rgb(39, 132, 186);
     color: white;
+    font-size: 1.4rem;
 }
 
-/* Contenedor responsivo con scroll interno estricto para tablas */
+/* Contenedor responsivo con scroll interno para tablas */
 .table-scroll-container {
-    max-height: 52vh !important;
+    max-height: 48vh !important;
     overflow-y: auto !important;
+    overflow-x: auto !important;
+    width: 100%;
 }
 
-table{
+table {
     margin: 0 auto;
     border-style: solid !important;
-    border-width: 7px !important;
+    border-width: 5px !important;
     border-color: rgb(18, 79, 114) !important;
+    width: 100%;
 }
 
-thead{
+thead {
     border-style: solid !important;
-    border-width: 7px !important;
+    border-width: 5px !important;
     border-color: rgb(18, 79, 114) !important;
 }
 
-/* FOOTER ACOPLADO ABAJO EN EL FLUJO FLEXBOX */
-footer{
-  flex-shrink: 0;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  z-index: 1050;
+/* ESTILOS PARA LA BARRA INFERIOR DE REGISTROS */
+.footer-registros {
+    background-color: rgb(39, 132, 186) !important;
+    border-style: solid !important;
+    border-width: 5px !important;
+    border-color: rgb(18, 79, 114) !important;
+    flex-shrink: 0;
+    width: 98%;
+    margin: 0 auto 10px auto;
+    padding: 6px 0;
+    z-index: 1050;
+    border-radius: 4px;
+}
+
+.footer-registros a {
+    color: white !important;
+    font-family: "Archivo Black", sans-serif;
+    font-size: 0.8rem;
+    text-decoration: none;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.footer-registros a:hover {
+    color: #ffeb3b !important;
 }
 
 /* ESTILOS PARA FORMULARIOS */
-form{
+form {
     border-style: solid !important;
-    border-width: 7px !important;
+    border-width: 5px !important;
     border-color: rgb(18, 79, 114) !important;
     background-color: rgb(39, 132, 186);
+}
+
+/* AJUSTES ESPECÍFICOS PARA DISPOSITIVOS MÓVILES */
+@media (max-width: 768px) {
+    body {
+        background-size: cover; 
+    }
+    
+    h1 {
+        font-size: 1.2rem;
+        border-width: 4px;
+        padding: 5px;
+    }
+
+    .footer-registros {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .footer-registros a {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
 }

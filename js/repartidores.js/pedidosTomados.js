@@ -1,12 +1,15 @@
 document.addEventListener("DOMContentLoaded", function() {
     function cargarPedidosTomados() {
         let cedulaRepartidor = localStorage.getItem('cedulaRepartidor');
-        const contenedor = document.getElementById('lista-pedidos');
-
-        if (!contenedor) return;
+        let tbodyTabla = document.getElementById('tablaPedidosBody');
+        let contenedorCards = document.getElementById('contenedorTarjetasPedidosCelular');
+        let contenedorAntiguo = document.getElementById('lista-pedidos'); // Compatibilidad por si acaso
 
         if (!cedulaRepartidor) {
-            contenedor.innerHTML = `<p class="text-danger">No se encontró la sesión del repartidor. Por favor, inicia sesión nuevamente.</p>`;
+            let msg = `<p class="text-danger text-center">No se encontró la sesión del repartidor. Por favor, inicia sesión nuevamente.</p>`;
+            if (tbodyTabla) tbodyTabla.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Sesión no encontrada.</td></tr>`;
+            if (contenedorCards) contenedorCards.innerHTML = `<div class="alert alert-danger">Sesión no encontrada.</div>`;
+            if (contenedorAntiguo) contenedorAntiguo.innerHTML = msg;
             return;
         }
 
@@ -15,63 +18,73 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (!Array.isArray(data) || data.length === 0) {
-                    contenedor.innerHTML = `<p class="text-muted">No tienes pedidos tomados actualmente.</p>`;
+                    let msg = `<p class="text-muted text-center py-3">No tienes pedidos tomados actualmente.</p>`;
+                    if (tbodyTabla) tbodyTabla.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">No tienes pedidos tomados actualmente.</td></tr>`;
+                    if (contenedorCards) contenedorCards.innerHTML = `<div class="text-center text-dark p-3 bg-light rounded-3 border">No tienes pedidos tomados</div>`;
+                    if (contenedorAntiguo && !tbodyTabla) contenedorAntiguo.innerHTML = msg;
                     return;
                 }
 
-                let html = `
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered align-middle">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>ID Pedido</th>
-                                    <th>Comercio</th>
-                                    <th>Detalles</th>
-                                    <th>Dirección</th>
-                                    <th>Estado</th>
-                                    <th>Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
+                let htmlTabla = '';
+                let htmlTarjetas = '';
 
                 data.forEach(pedido => {
                     let idPedido = pedido.ID_pedido || pedido.id_pedido || '';
                     let estadoActual = pedido.estado || 'Asignado';
                     
-                    // Definir qué botón mostrar según el estado exacto del pedido
-                    let botonAccion = '';
+                    let botonAccionTabla = '';
+                    let botonAccionTarjeta = '';
                     let badgeClass = 'bg-primary';
 
                     if (estadoActual.toLowerCase() === 'asignado') {
-                        botonAccion = `<button class="btn btn-warning btn-sm btn-cambiar-estado" data-id="${idPedido}" data-nuevo="Recogido">Marcar Recogido</button>`;
+                        botonAccionTabla = `<button class="btn btn-warning btn-sm btn-cambiar-estado fw-bold px-3" data-id="${idPedido}" data-nuevo="Recogido">Marcar Recogido</button>`;
+                        botonAccionTarjeta = `<button class="btn btn-warning btn-sm btn-cambiar-estado fw-bold w-100 text-uppercase shadow-sm text-dark" data-id="${idPedido}" data-nuevo="Recogido">📦 Marcar Recogido</button>`;
                         badgeClass = 'bg-primary';
                     } else if (estadoActual.toLowerCase() === 'recogido') {
-                        // Si ya está recogido, muestra el botón para marcarlo como entregado
-                        botonAccion = `<button class="btn btn-success btn-sm btn-cambiar-estado" data-id="${idPedido}" data-nuevo="Entregado">Marcar Entregado</button>`;
+                        botonAccionTabla = `<button class="btn btn-success btn-sm btn-cambiar-estado fw-bold px-3" data-id="${idPedido}" data-nuevo="Entregado">Marcar Entregado</button>`;
+                        botonAccionTarjeta = `<button class="btn btn-success btn-sm btn-cambiar-estado fw-bold w-100 text-uppercase shadow-sm" data-id="${idPedido}" data-nuevo="Entregado">✅ Marcar Entregado</button>`;
                         badgeClass = 'bg-warning text-dark';
                     } else {
-                        botonAccion = `<span class="badge bg-secondary">Finalizado</span>`;
+                        botonAccionTabla = `<span class="badge bg-secondary">Finalizado</span>`;
+                        botonAccionTarjeta = `<span class="badge bg-secondary w-100 py-2">Finalizado</span>`;
                     }
 
-                    html += `
+                    // 1. Fila para la tabla de PC
+                    htmlTabla += `
                         <tr>
                             <td><strong>#${idPedido}</strong></td>
                             <td>${pedido.comercioP || ''}</td>
                             <td>${pedido.detalle || 'Sin detalles'}</td>
                             <td>${pedido.direccion || ''}</td>
                             <td><span class="badge ${badgeClass}">${estadoActual}</span></td>
-                            <td>${botonAccion}</td>
+                            <td>${botonAccionTabla}</td>
                         </tr>
+                    `;
+
+                    // 2. Tarjeta optimizada para Celular
+                    htmlTarjetas += `
+                        <div class="card shadow-sm mb-3 rounded-3" style="background-color: rgb(39, 132, 186); color: white; border: 4px solid rgb(18, 79, 114) !important;">
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-dark">Pedido: #${idPedido}</span>
+                                    <span class="badge ${badgeClass}">${estadoActual}</span>
+                                </div>
+                                <h6 class="fw-bold mb-1">🏪 Comercio: <span class="fw-normal">${pedido.comercioP || 'N/D'}</span></h6>
+                                <p class="mb-1 small text-white-50">Detalles: <span class="text-white">${pedido.detalle || 'Sin detalles'}</span></p>
+                                <p class="mb-2 small text-white-50">📍 Dirección: <span class="text-white">${pedido.direccion || ''}</span></p>
+                                ${botonAccionTarjeta}
+                            </div>
+                        </div>
                     `;
                 });
 
-                html += `</tbody></table></div>`;
-                contenedor.innerHTML = html;
+                if (tbodyTabla) tbodyTabla.innerHTML = htmlTabla;
+                if (contenedorCards) contenedorCards.innerHTML = htmlTarjetas;
             })
             .catch(error => {
                 console.error('Error al cargar pedidos:', error);
-                contenedor.innerHTML = `<p class="text-danger">Ocurrió un error al cargar tus pedidos tomados.</p>`;
+                if (tbodyTabla) tbodyTabla.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error al conectar con el servidor.</td></tr>`;
+                if (contenedorCards) contenedorCards.innerHTML = `<div class="text-center text-danger p-3 bg-light rounded-3 border">Error de conexión</div>`;
             });
     }
 
@@ -80,9 +93,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // Listener global para procesar el cambio de estado con SweetAlert2
 document.addEventListener("click", function(event) {
-    if (event.target.classList.contains("btn-cambiar-estado")) {
-        let idPedido = event.target.getAttribute("data-id");
-        let nuevoEstado = event.target.getAttribute("data-nuevo");
+    let botonEstado = event.target.closest(".btn-cambiar-estado");
+    if (botonEstado) {
+        let idPedido = botonEstado.getAttribute("data-id");
+        let nuevoEstado = botonEstado.getAttribute("data-nuevo");
         let cedulaRepartidor = localStorage.getItem("cedulaRepartidor");
 
         Swal.fire({
@@ -111,8 +125,6 @@ document.addEventListener("click", function(event) {
                             timer: 1500,
                             showConfirmButton: false
                         }).then(() => {
-                            // En lugar de location.reload(), llamamos a la función interna o recargamos limpiamente
-                            // para refrescar los datos sin perder el contexto de la vista.
                             location.reload(); 
                         });
                     } else {

@@ -4,103 +4,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌐Sonic Delivery🌐</title>
+  <title>Sonic Delivery - Realizar Pedido</title>
   
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts: Archivo Black -->
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/principal.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-  <!-- FUENTE DE LETRA -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Creepster&family=Libertinus+Keyboard&family=Press+Start+2P&display=swap"
-    rel="stylesheet">
 </head>
 
 <body>
 
-  <!-- MENÚ DE NAVEGACIÓN -->
-  <nav class="navbar navbar-expand-lg navbar-custom flex-shrink-0">
+<nav class="navbar navbar-expand-lg navbar-custom shadow-sm flex-shrink-0">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">🌐SONIC DELIVERY🌐</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      <!-- LOGO -->
+      <a class="navbar-brand text-white fw-bold" href="#">🌐 SONIC DELIVERY 🌐</a>
+      
+      <!-- BOTÓN MENÚ HAMBURGUESA -->
+      <button class="navbar-toggler border-light text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+      <!-- CONTENEDOR COLAPSIBLE -->
+      <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <!-- ENLACES DE NAVEGACIÓN -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 my-2 my-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="RealizaP.html">Realiza Pedido</a>
+            <a class="nav-link text-white px-3 py-2" aria-current="page" href="RealizaP.html">📝 Realizar Pedido</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="pedidosD.html">Pedidos Disponibles</a>
+            <a class="nav-link text-white active px-3 py-2" href="pedidosD.html">📦 Mis Pedidos</a>
           </li>
         </ul>
 
-        <!-- Aquí se pintará automáticamente "Administrador: Nombre" -->
-        <div
-          class="d-flex align-items-center bg-dark bg-opacity-25 px-3 py-1 rounded-pill border border-light border-opacity-10 me-3 shadow-sm">
-          <div class="me-2 fs-5">🛡️</div>
-          <div class="d-flex flex-column text-start">
-            <span class="text-white-50"
-              style="font-size: 0.65rem; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1;">Comercio</span>
-            <span id="infoSesion" class="text-white fw-bold" style="font-size: 0.85rem;">Cargando...</span>
+        <!-- SECCIÓN DERECHA: PERFIL Y BOTÓN SALIR -->
+        <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 mt-2 mt-lg-0">
+          <!-- Perfil de Sesión del Comercio -->
+          <div class="d-flex align-items-center bg-dark bg-opacity-25 px-3 py-1 rounded-pill border border-light border-opacity-10 shadow-sm">
+            <div class="me-2 fs-5">🏪</div>
+            <div class="d-flex flex-column text-start">
+              <span class="text-white-50" style="font-size: 0.65rem; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1;">Comercio</span>
+              <span id="infoSesion" class="text-white fw-bold" style="font-size: 0.85rem;">Cargando...</span>
+            </div>
           </div>
-        </div>
 
-        <!-- Botón de Cerrar Sesión alineado a la derecha -->
-        <button id="btnCerrarSesion" class="btn btn-outline-danger" type="button">Cerrar Sesión</button>
+          <!-- Botón de Cerrar Sesión -->
+          <button id="btnCerrarSesion" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold text-white border-danger w-100 w-lg-auto" type="button">Cerrar Sesión</button>
+        </div>
       </div>
     </div>
   </nav>
 
-  <!-- TÍTULO H1 DE EXTREMO A EXTREMO CON ESPACIADO SIMÉTRICO -->
+  <!-- TÍTULO H1 -->
   <h1 class="mt-3 mb-3 py-2 fs-3 w-100 text-center">Realizar un Pedido</h1>
 
-  <!-- FORMULARIO DE PEDIDO CONTENIDO -->
-  <div class="main-content container-fluid px-4">
-    <form action="../PHP/comercioPHP/registroPedido.php" method="post" class="p-4 rounded shadow">
-      <div class="mb-3">
-        <label class="form-label fw-bold text-white">Detalles</label>
-        <input type="text" class="form-control" id="Detalles" name="Detalles" placeholder="Opcional llenar">
+  <!-- FORMULARIO DE PEDIDO CONTENIDO (Diseño Responsivo Adaptado) -->
+  <div class="main-content container-fluid px-3 my-3 d-flex justify-content-center align-items-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card shadow-lg p-4 rounded-3 border-custom" style="background-color: rgb(39, 132, 186); color: white; border: 4px solid rgb(18, 79, 114) !important;">
+        <h4 class="mb-4 fw-bold text-center text-white">📝 Datos del Nuevo Pedido</h4>
+
+        <form action="../PHP/comercioPHP/registroPedido.php" method="post" id="formRealizarPedido">
+          <div class="mb-3">
+            <label for="Detalles" class="form-label fw-bold text-white">Detalles</label>
+            <input type="text" class="form-control shadow-sm" id="Detalles" name="Detalles" placeholder="Opcional llenar">
+          </div>
+
+          <div class="mb-3">
+            <label for="Direccion" class="form-label fw-bold text-white">Dirección</label>
+            <input type="text" class="form-control shadow-sm" id="Direccion" name="Direccion">
+          </div>
+
+          <div class="mb-3">
+            <label for="Comercio" class="form-label fw-bold text-white">Comercio</label>
+            <input type="text" class="form-control shadow-sm bg-light" id="Comercio" name="Comercio" readonly>
+          </div>
+
+          <button type="submit" id="guardar" class="btn btn-dark w-100 mt-3 fw-bold text-uppercase py-2 shadow-sm" style="background-color: rgb(18, 79, 114); border: none;">
+            Enviar
+          </button>
+        </form>
       </div>
-      <div class="mb-3">
-        <label class="form-label fw-bold text-white">Dirección</label>
-        <input type="text" class="form-control" id="Direccion" name="Direccion">
-      </div>
-      <div class="mb-3">
-        <label class="form-label fw-bold text-white">Comercio</label>
-        <input type="text" class="form-control" id="Comercio" name="Comercio">
-      </div>
-      <button type="submit" id="guardar" class="btn btn-dark w-100 mt-2">Enviar</button>
-    </form>
+    </div>
   </div>
 
-  <!-- FOOTER PEGADO TOTALMENTE ABAJO -->
+  <!-- FOOTER -->
   <footer>
     <nav class="navbar navbar-expand-lg navbar-custom m-0 py-1">
-      <div class="container-fluid">
-        <a class="navbar-brand fs-6" href="#">🌐SONIC DELIVERY🌐</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#footerNav"
-          aria-controls="footerNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="footerNav">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
-            <li class="nav-item text-white px-2 small">
-              <span class="fw-bold">EN CASO DE UN PROBLEMA CON TU PEDIDO, POR FAVOR CONTACTA A NUESTRO SOPORTE</span> | 📞 : 3135502066
-            </li>
-          </ul>
-        </div>
+      <div class="container-fluid justify-content-center">
+        <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+          <li class="nav-item text-white px-2 small text-center">
+            <span class="fw-bold">EN CASO DE UN PROBLEMA CON TU PEDIDO, POR FAVOR CONTACTA A NUESTRO SOPORTE</span> | 📞 : 3135502066
+          </li>
+        </ul>
       </div>
     </nav>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../js/comercioJS/comercioPedidos.js"></script>
-  <script src="../js/sesionNavbar.js"></script>
+  <script src="../js/sesionNavbar.js" defer></script>
+  <script src="../js/comercioJS/comercioPedidos.js" defer></script>
 
 </body>
 

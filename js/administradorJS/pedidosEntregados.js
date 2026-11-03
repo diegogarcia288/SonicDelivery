@@ -1,15 +1,17 @@
 console.log("¡pedidosEntregados.js cargado correctamente!");
 
 function cargarPedidosEntregadosAdmin() {
-    // Usamos la ruta absoluta exacta para consultar los pedidos del admin
     fetch(window.location.origin + '/sonic_delivery/PHP/administradorPHP/obtener_pedidos_admin.php')
         .then(response => response.json())
         .then(data => {
-            let contenedor = document.getElementById('lista-pedidos');
-            if (!contenedor) return;
+            let tbodyTabla = document.getElementById('tablaPedidosBody');
+            let contenedorCards = document.getElementById('contenedorTarjetasPedidosCelular');
+
+            if (!tbodyTabla && !contenedorCards) return;
 
             if (!data || data.length === 0) {
-                contenedor.innerHTML = '<p class="text-muted">No hay pedidos registrados en el sistema.</p>';
+                if (tbodyTabla) tbodyTabla.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">No hay pedidos registrados en el sistema.</td></tr>`;
+                if (contenedorCards) contenedorCards.innerHTML = `<div class="text-center text-dark p-3 bg-light rounded-3 border">No hay pedidos registrados</div>`;
                 return;
             }
 
@@ -20,56 +22,65 @@ function cargarPedidosEntregadosAdmin() {
             });
 
             if (pedidosEntregados.length === 0) {
-                contenedor.innerHTML = '<p class="text-muted">No hay historial de pedidos entregados en este momento.</p>';
+                if (tbodyTabla) tbodyTabla.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">No hay historial de pedidos entregados en este momento.</td></tr>`;
+                if (contenedorCards) contenedorCards.innerHTML = `<div class="text-center text-dark p-3 bg-light rounded-3 border">No hay historial de pedidos entregados</div>`;
                 return;
             }
 
-            let html = `
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered align-middle">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>ID Pedido</th>
-                                <th>Comercio</th>
-                                <th>Detalles</th>
-                                <th>Dirección</th>
-                                <th>Estado</th>
-                                <th>Repartidor Asignado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
+            let htmlTabla = '';
+            let htmlTarjetas = '';
 
             pedidosEntregados.forEach(pedido => {
-                let estadoActual = pedido.estado.trim();
+                let estadoActual = pedido.estado ? pedido.estado.trim() : 'Entregado';
                 let badgeEstado = `<span class="badge bg-primary">${estadoActual}</span>`;
 
-                let infoRepartidor = pedido.CedulaR 
+                let infoRepartidorTabla = pedido.CedulaR 
                     ? `${pedido.nombreRepartidor || 'Sin nombre'} <br><small class="text-muted">(Cédula: ${pedido.CedulaR})</small>` 
                     : `<span class="text-muted">Sin asignar</span>`;
 
+                let infoRepartidorTexto = pedido.CedulaR 
+                    ? `${pedido.nombreRepartidor || 'Sin nombre'} (Cédula: ${pedido.CedulaR})` 
+                    : 'Sin asignar';
+
                 let idPedido = pedido.ID_pedido || pedido.id_pedido || '';
 
-                html += `
+                // 1. Fila para la tabla de PC
+                htmlTabla += `
                     <tr>
                         <td><strong>#${idPedido}</strong></td>
                         <td>${pedido.comercioP || ''}</td>
                         <td>${pedido.detalle || 'Sin detalles'}</td>
                         <td>${pedido.direccion || ''}</td>
                         <td>${badgeEstado}</td>
-                        <td>${infoRepartidor}</td>
+                        <td>${infoRepartidorTabla}</td>
                     </tr>
+                `;
+
+                // 2. Tarjeta para Celular (diseño corporativo idéntico al resto del panel)
+                htmlTarjetas += `
+                    <div class="card shadow-sm mb-3 rounded-3" style="background-color: rgb(39, 132, 186); color: white; border: 4px solid rgb(18, 79, 114) !important;">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-dark">Pedido: #${idPedido}</span>
+                                ${badgeEstado}
+                            </div>
+                            <h6 class="fw-bold mb-1">🏪 Comercio: <span class="fw-normal">${pedido.comercioP || 'N/D'}</span></h6>
+                            <p class="mb-1 small text-white-50">Detalles: <span class="text-white">${pedido.detalle || 'Sin detalles'}</span></p>
+                            <p class="mb-1 small text-white-50">📍 Dirección: <span class="text-white">${pedido.direccion || ''}</span></p>
+                            <p class="mb-0 small text-white-50">Repartidor: <strong class="text-white">${infoRepartidorTexto}</strong></p>
+                        </div>
+                    </div>
                 `;
             });
 
-            html += `</tbody></table></div>`;
-            contenedor.innerHTML = html;
+            if (tbodyTabla) tbodyTabla.innerHTML = htmlTabla;
+            if (contenedorCards) contenedorCards.innerHTML = htmlTarjetas;
         })
         .catch(error => {
             console.error('Error al cargar los pedidos entregados:', error);
-            let contenedor = document.getElementById('lista-pedidos');
-            if (contenedor) {
-                contenedor.innerHTML = `<p class="text-danger text-center">Error al conectar con el servidor.</p>`;
+            let tbodyTabla = document.getElementById('tablaPedidosBody');
+            if (tbodyTabla) {
+                tbodyTabla.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error al conectar con el servidor.</td></tr>`;
             }
         });
 }
