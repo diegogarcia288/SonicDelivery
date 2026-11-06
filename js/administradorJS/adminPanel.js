@@ -71,52 +71,15 @@ function cargarRepartidoresActivosAdmin() {
 }
 
 // ==========================================
-// FUNCIÓN Y LISTENER PARA CERRAR SESIÓN
+// FUNCIÓN PARA REDIRECCIONAR AL LOGIN
 // ==========================================
-document.addEventListener("click", function(event) {
-    let botonCerrar = event.target.closest("#btnCerrarSesion");
-
-    if (botonCerrar) {
-        event.preventDefault();
-
-        // Ventana de confirmación SweetAlert2
-        Swal.fire({
-            title: '¿Cerrar sesión?',
-            text: '¿Estás seguro de que deseas salir?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, salir',
-            cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Limpieza de sesión
-                localStorage.clear();
-
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        title: '¡Sesión Cerrada!',
-                        text: 'Has salido del sistema correctamente.',
-                        icon: 'success',
-                        timer: 1500,
-                        showConfirmButton: false
-                    }).then(() => {
-                        redireccionarLogin();
-                    });
-                } else {
-                    redireccionarLogin();
-                }
-            }
-        });
-    }
-});
-
 function redireccionarLogin() {
     window.location.href = window.location.origin + "/sonic_delivery/iniciosesion.html";
 }
 
-// Ejecutar al cargar la página y refrescar cada 5 segundos
+// ==========================================
+// INICIALIZACIÓN Y REFRESCO AUTOMÁTICO
+// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     cargarRepartidoresActivosAdmin();
     setInterval(cargarRepartidoresActivosAdmin, 5000);

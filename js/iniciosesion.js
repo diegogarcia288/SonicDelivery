@@ -1,25 +1,27 @@
 document.addEventListener("DOMContentLoaded", function() {
     
     // --- LÓGICA DEL FORMULARIO DE LOGIN / ENVÍO DE CREDENCIALES ---
-    const formLogin = document.getElementById("formLogin"); // Asegúrate de que el formulario tenga este ID o ajústalo al que uses
+    const formLogin = document.getElementById("formLogin");
 
     if (formLogin) {
         formLogin.addEventListener("submit", function(e) {
             e.preventDefault();
 
-            let rolActivo = localStorage.getItem("rolSonic") || document.getElementById("rolSelect").value;
-            let cedula = document.getElementById("cedula").value; // O el campo de usuario correspondiente
+            // Obtenemos el rol activo o seleccionado de forma segura
+            let rolSelectElement = document.getElementById("rolSelect");
+            let rolSeleccionado = localStorage.getItem("rolSonic") || (rolSelectElement ? rolSelectElement.value : "");
+            
+            let cedula = document.getElementById("cedula").value;
             let password = document.getElementById("password").value;
 
             // Determinar a qué archivo PHP apuntar según el rol
             let urlDestino = "";
             if (rolSeleccionado === "administrador") {
-                // Ruta absoluta corregida apuntando a administradorPHP
                 urlDestino = window.location.origin + '/sonic_delivery/PHP/administradorPHP/verificarAdmin.php';
             } else if (rolSeleccionado === "comercio") {
-                urlDestino = window.location.origin + '/sonic_delivery/PHP/comercioPHP/verificarComercio.php'; // Ajusta si aplica
+                urlDestino = window.location.origin + '/sonic_delivery/PHP/comercioPHP/verificarComercio.php';
             } else if (rolSeleccionado === "repartidor") {
-                urlDestino = window.location.origin + '/sonic_delivery/PHP/repartidoresPHP/verificarRepartidor.php'; // Ajusta si aplica
+                urlDestino = window.location.origin + '/sonic_delivery/PHP/repartidoresPHP/verificarRepartidor.php';
             }
 
             // Petición de verificación al servidor

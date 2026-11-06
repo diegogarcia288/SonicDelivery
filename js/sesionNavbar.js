@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
-    let rol = localStorage.getItem('rolSonic');
+    // Obtenemos el nombre de usuario de cualquier posible clave guardada en el login
     let nombre = localStorage.getItem('nombreUsuario') || localStorage.getItem('usuarioComercio') || localStorage.getItem('nombreRepartidor');
     let spanSesion = document.getElementById("infoSesion");
 
-    // AQUÍ EL CAMBIO: Asignamos únicamente el nombre limpio, sin repetir "Rol:"
+    // Asignamos el nombre limpio al elemento del navbar
     if (nombre && spanSesion) {
         spanSesion.textContent = nombre;
     }
@@ -14,7 +14,8 @@ document.addEventListener("DOMContentLoaded", function() {
             event.preventDefault();
             event.stopPropagation();
 
-            let cedulaRepartidor = localStorage.getItem('cedulaRepartidor') || localStorage.getItem('cedula') || localStorage.getItem('CedulaR');
+            // Identificamos la cédula independientemente del rol que cierre sesión
+            let cedulaUsuario = localStorage.getItem('cedulaRepartidor') || localStorage.getItem('cedula') || localStorage.getItem('CedulaR');
 
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
@@ -28,27 +29,28 @@ document.addEventListener("DOMContentLoaded", function() {
                     cancelButtonColor: "#d33"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        ejecutarCierreSesion(cedulaRepartidor);
+                        ejecutarCierreSesion(cedulaUsuario);
                     }
                 });
             } else {
                 if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
-                    ejecutarCierreSesion(cedulaRepartidor);
+                    ejecutarCierreSesion(cedulaUsuario);
                 }
             }
         });
     }
 });
 
-async function ejecutarCierreSesion(cedulaRepartidor) {
-    if (cedulaRepartidor) {
+async function ejecutarCierreSesion(cedula) {
+    // Si existe una cédula asociada (por ejemplo, repartidor), actualizamos su estado a Inactivo en el servidor
+    if (cedula) {
         try {
             let response = await fetch(window.location.origin + "/sonic_delivery/PHP/repartidoresPHP/actualizarestado.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: `cedula=${cedulaRepartidor}&estado=Inactivo`
+                body: `cedula=${cedula}&estado=Inactivo`
             });
 
             let data = await response.json();
@@ -58,6 +60,7 @@ async function ejecutarCierreSesion(cedulaRepartidor) {
         }
     }
 
+    // Limpiamos todo el almacenamiento local y redirigimos al login principal
     localStorage.clear(); 
     window.location.href = window.location.origin + "/sonic_delivery/iniciosesion.html";
 }
