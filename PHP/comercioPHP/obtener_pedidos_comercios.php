@@ -3,13 +3,17 @@
 ini_set('display_errors', 0);
 error_reporting(0);
 
-header('Content-Type: application/json');
-include('../conexion.php'); 
+header('Content-Type: application/json; charset=utf-8');
 
-// Detectar variable de conexión activa ($conexion o $conn)
-$db = isset($conexion) ? $conexion : (isset($conn) ? $conn : null);
+// Incluir la conexión PDO
+if (file_exists('../conexion.php')) {
+    include('../conexion.php');
+} elseif (file_exists('conexion.php')) {
+    include('conexion.php');
+}
 
-if (!$db) {
+// Validar que la conexión PDO ($pdo) exista
+if (!isset($pdo)) {
     echo json_encode(["error" => "Error de conexión a la base de datos"]);
     exit;
 }
@@ -21,39 +25,35 @@ if (empty($comercio)) {
     exit;
 }
 
-/* 
-  Consulta con LEFT JOIN usando 'CedulaR' que es el nombre exacto 
-  de la llave primaria en tu tabla 'repartidor'.
-*/
-$sql = "SELECT p.ID_pedido, p.CedulaR, p.comercioP, p.detalle, p.direccion, p.estado, r.nombre AS nombreRepartidor 
-        FROM pedidos p 
-        LEFT JOIN repartidor r ON p.CedulaR = r.CedulaR 
-        WHERE p.comercioP = ?";
+try {
+    /* 
+      Consulta con LEFT JOIN usando PDO y 'CedulaR' como llave para traer 
+      la información de los pedidos y el repartidor asignado.
+    */
+    $sql = "SELECT p.ID_pedido, p.CedulaR, p.comercioP, p.detalle, p.direccion, p.estado, r.nombre AS nombreRepartidor 
+            FROM pedidos p 
+            LEFT JOIN repartidor r ON p.CedulaR = r.CedulaR 
+            WHERE p.comercioP = ?";
 
-$stmt = $db->prepare($sql);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$comercio]);
+    $pedidosOriginales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if (!$stmt) {
-    echo json_encode(["error" => "SQL Error: " . $db->error]);
-    exit;
-}
-
-$stmt->bind_param("s", $comercio);
-$stmt->execute();
-$resultado = $stmt->get_result();
-
-$pedidos = [];
-while ($row = $resultado->fetch_assoc()) {
-    if (empty($row['CedulaR'])) {
-        $row['nombreRepartidor'] = 'Pendiente de tomar';
-    } elseif (empty($row['nombreRepartidor'])) {
-        $row['nombreRepartidor'] = 'Sin nombre';
+    $pedidos = [];
+    foreach ($pedidosOriginales as $row) {
+        if (empty($row['CedulaR'])) {
+            $row['nombreRepartidor'] = 'Pendiente de tomar';
+        } elseif (empty($row['nombreRepartidor'])) {
+            $row['nombreRepartidor'] = 'Sin nombre';
+        }
+        
+        $pedidos[] = $row;
     }
-    
-    $pedidos[] = $row;
+
+    // Devolver el JSON con codificación limpia
+    echo json_encode($pedidos, JSON_UNESCAPED_UNICODE);
+
+} catch (PDOException $e) {
+    echo json_encode(["error" => "SQL Error: " . $e->getMessage()]);
 }
-
-echo json_encode($pedidos);
-
-$stmt->close();
-$db->close();
 ?>

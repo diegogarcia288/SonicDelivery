@@ -1,18 +1,21 @@
 <?php
-
 $host     = "localhost";
 $usuario  = "root";
 $password = ""; // Contraseña Servidor XAMPP
 $database = "sonic_delivery"; // Nombre de la base de datos
+$charset  = "utf8mb4";
 
-// Se crea la conexión a la base de datos
-$conexion = new mysqli($host, $usuario, $password, $database);
+$dsn = "mysql:host=$host;dbname=$database;charset=$charset";
 
-// Se verifica la conexión a la base de datos
-if ($conexion->connect_error) {
-    die("Error de conexión a la base de datos: " . $conexion->connect_error); 
+$opciones = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false, // Vital para bloquear Inyección SQL real
+];
+
+try {
+    $pdo = new PDO($dsn, $usuario, $password, $opciones);
+} catch (\PDOException $e) {
+    die("Error de conexión a la base de datos. Por favor, intente más tarde.");
 }
-
-// Asegurar que los caracteres especiales (tildes, ñ) se lean bien
-$conexion->set_charset("utf8mb4");
 ?>

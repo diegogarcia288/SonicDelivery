@@ -1,11 +1,13 @@
 <?php
+// Iniciamos sesión si se requiere
+session_start();
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// PHP/registroAdmin.php
-include('../conexion.php');
+// PHP/registroAdmin.php - Incluimos la conexión PDO
+require_once '../conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cedula   = $_POST['cedula_administrador'] ?? '';
@@ -43,105 +45,94 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // 3. Verificar si la cédula ya existe
-    $sql_cedula = "SELECT cedula FROM administrador WHERE cedula = ?";
-    $stmt_c = $conexion->prepare($sql_cedula);
-    $stmt_c->bind_param("s", $cedula);
-    $stmt_c->execute();
-    $stmt_c->store_result();
-
-    if ($stmt_c->num_rows > 0) {
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-        echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                Swal.fire({
-                    icon: 'warning',
-                    title: '¡Cédula ya registrada!',
-                    text: 'Ya existe un administrador registrado con la cédula " . addslashes($cedula) . ".',
-                    confirmButtonText: 'Volver'
-                }).then(() => {
-                    window.history.back();
-                });
-            });
-        </script>";
-        exit();
-    }
-    $stmt_c->close();
-
-    // 4. Verificar si el teléfono ya existe
-    $sql_tel = "SELECT telefono FROM administrador WHERE telefono = ?";
-    $stmt_t = $conexion->prepare($sql_tel);
-    $stmt_t->bind_param("s", $telefono);
-    $stmt_t->execute();
-    $stmt_t->store_result();
-
-    if ($stmt_t->num_rows > 0) {
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-        echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                Swal.fire({
-                    icon: 'warning',
-                    title: '¡Teléfono ya registrado!',
-                    text: 'Ya existe un administrador registrado con el número de teléfono " . addslashes($telefono) . ".',
-                    confirmButtonText: 'Volver'
-                }).then(() => {
-                    window.history.back();
-                });
-            });
-        </script>";
-        exit();
-    }
-    $stmt_t->close();
-
-    // 5. Insertar el registro protegido con try-catch
-    $sql = "INSERT INTO administrador (cedula, nombre, contraseña, telefono) VALUES (?, ?, ?, ?)";
-    $stmt = $conexion->prepare($sql);
-    
-    if ($stmt) {
-        $stmt->bind_param("ssss", $cedula, $nombre, $password, $telefono);
+    try {
+        // 3. Verificar si la cédula ya existe usando PDO
+        $sql_cedula = "SELECT cedula FROM administrador WHERE cedula = ?";
+        $stmt_c = $pdo->prepare($sql_cedula);
+        $stmt_c->execute([$cedula]);
         
-        try {
-            if ($stmt->execute()) {
-                // ÉXITO
-                echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-                echo '<body style="background-color: #f8f9fa;"></body>';
-                echo '<script>
-                    Swal.fire({
-                        icon: "success",
-                        title: "¡El admin fue registrado con éxito, BIENVENIDO!",
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then(() => {
-                        window.location.href = window.location.origin + "/sonic_delivery/administradores/PanelAdmin.html";
-                    });
-                </script>';
-                exit();
-            }
-        } catch (mysqli_sql_exception $e) {
-            $mensajeError = ($e->getCode() === 1062) 
-                ? "La cédula o el teléfono ya se encuentran registrados en el sistema." 
-                : "Error en la base de datos: " . $e->getMessage();
-
+        if ($stmt_c->rowCount() > 0) {
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
                         icon: 'warning',
-                        title: '¡No se pudo registrar!',
-                        text: '" . addslashes($mensajeError) . "',
+                        title: '¡Cédula ya registrada!',
+                        text: 'Ya existe un administrador registrado con la cédula " . addslashes($cedula) . ".',
                         confirmButtonText: 'Volver'
                     }).then(() => {
                         window.history.back();
                     });
                 });
             </script>";
+            exit();
         }
-        
-        $stmt->close();
-    } else {
-        echo "Error en la preparación de la consulta: " . $conexion->error;
-    }
 
-    $conexion->close();
+        // 4. Verificar si el teléfono ya existe usando PDO
+        $sql_tel = "SELECT telefono FROM administrador WHERE telefono = ?";
+        $stmt_t = $pdo->prepare($sql_tel);
+        $stmt_t->execute([$telefono]);
+        
+        if ($stmt_t->rowCount() > 0) {
+            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+            echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '¡Teléfono ya registrado!',
+                        text: 'Ya existe un administrador registrado con el número de teléfono " . addslashes($telefono) . ".',
+                        confirmButtonText: 'Volver'
+                    }).then(() => {
+                        window.history.back();
+                    });
+                });
+            </script>";
+            exit();
+        }
+
+        // 5. Cifrar la contraseña de manera segura antes de guardarla
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        // 6. Insertar el registro protegido con PDO
+        $sql = "INSERT INTO administrador (cedula, nombre, contraseña, telefono) VALUES (?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        
+        if ($stmt->execute([$cedula, $nombre, $passwordHash, $telefono])) {
+            // ÉXITO
+            echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+            echo '<body style="background-color: #f8f9fa;"></body>';
+            echo '<script>
+                Swal.fire({
+                    icon: "success",
+                    title: "¡El admin fue registrado con éxito, BIENVENIDO!",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    window.location.href = window.location.origin + "/sonic_delivery/administradores/PanelAdmin.html";
+                });
+            </script>';
+            exit();
+        }
+
+    } catch (PDOException $e) {
+        // Código 23000 o duplicidad en MySQL
+        $mensajeError = ($e->getCode() == 23000) 
+            ? "La cédula o el teléfono ya se encuentran registrados en el sistema." 
+            : "Error en la base de datos: " . $e->getMessage();
+
+        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '¡No se pudo registrar!',
+                    text: '" . addslashes($mensajeError) . "',
+                    confirmButtonText: 'Volver'
+                }).then(() => {
+                    window.history.back();
+                });
+            });
+        </script>";
+    }
 }
 ?>

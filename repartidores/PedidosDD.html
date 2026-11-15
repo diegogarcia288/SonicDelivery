@@ -15,6 +15,18 @@
 
 <body>
 
+  <!-- VALIDACIÓN DE SESIÓN -->
+
+  <script>
+    // Verificamos si existe la sesión y el rol correspondiente en el navegador
+    const rolSonic = localStorage.getItem('rolSonic');
+    if (!rolSonic || rolSonic !== 'Repartidor') {
+      // Si no está logueado o no tiene el rol correcto, lo devolvemos al inicio de sesión
+      alert('Acceso no autorizado. Por favor inicia sesión.');
+      window.location.href = '../iniciosesion.html'; // Ajusta la ruta a tu página de login principal
+    }
+  </script>
+
   <!-- MENÚ DE NAVEGACIÓN -->
   <nav class="navbar navbar-expand-lg navbar-custom shadow-sm flex-shrink-0">
     <div class="container-fluid">

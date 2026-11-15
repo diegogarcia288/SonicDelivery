@@ -1,16 +1,21 @@
 <?php
+// Iniciamos sesión si se requiere
+session_start();
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('../conexion.php');
+// Incluimos la conexión PDO
+require_once '../conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre      = $_POST['nombre'] ?? '';
-    $cedulaR     = $_POST['cedula'] ?? '';
-    $password    = $_POST['contrasena'] ?? ''; 
-    $telefono    = $_POST['telefono'] ?? '';
-    $cedulaAdmin = $_POST['cedula_admin'] ?? '';
+    // Aplicamos trim() para limpiar espacios accidentales al inicio o final
+    $nombre      = trim($_POST['nombre'] ?? '');
+    $cedulaR     = trim($_POST['cedula'] ?? '');
+    $password    = trim($_POST['contrasena'] ?? ''); 
+    $telefono    = trim($_POST['telefono'] ?? '');
+    $cedulaAdmin = trim($_POST['cedula_admin'] ?? '');
 
     // 1. Validar que ningún campo esté vacío
     if (empty($nombre) || empty($cedulaR) || empty($password) || empty($telefono) || empty($cedulaAdmin)) {
@@ -42,83 +47,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // 3. Verificar que el administrador exista en la base de datos
-    $checkAdmin = $conexion->prepare("SELECT cedula FROM administrador WHERE cedula = ?");
-    $checkAdmin->bind_param("s", $cedulaAdmin);
-    $checkAdmin->execute();
-    $resultadoAdmin = $checkAdmin->get_result();
-
-    if ($resultadoAdmin->num_rows === 0) {
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-        echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Administrador no encontrado',
-                    text: 'La cédula del administrador ingresada no está registrada en el sistema.'
-                }).then(() => { window.history.back(); });
-            });
-        </script>";
-        exit();
-    }
-    $checkAdmin->close();
-
-    // 4. Verificar si la cédula del repartidor ya existe
-    $checkCedula = $conexion->prepare("SELECT CedulaR FROM repartidor WHERE CedulaR = ?");
-    $checkCedula->bind_param("s", $cedulaR);
-    $checkCedula->execute();
-    $checkCedula->store_result();
-
-    if ($checkCedula->num_rows > 0) {
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-        echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                Swal.fire({
-                    icon: 'warning',
-                    title: '¡Cédula ya registrada!',
-                    text: 'Ya existe un repartidor registrado con la cédula " . addslashes($cedulaR) . ".',
-                    confirmButtonText: 'Volver'
-                }).then(() => {
-                    window.history.back();
-                });
-            });
-        </script>";
-        exit();
-    }
-    $checkCedula->close();
-
-    // 5. Verificar si el teléfono del repartidor ya existe
-    $checkTel = $conexion->prepare("SELECT telefono FROM repartidor WHERE telefono = ?");
-    $checkTel->bind_param("s", $telefono);
-    $checkTel->execute();
-    $checkTel->store_result();
-
-    if ($checkTel->num_rows > 0) {
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-        echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                Swal.fire({
-                    icon: 'warning',
-                    title: '¡Teléfono ya registrado!',
-                    text: 'Ya existe un repartidor registrado con el número de teléfono " . addslashes($telefono) . ".',
-                    confirmButtonText: 'Volver'
-                }).then(() => {
-                    window.history.back();
-                });
-            });
-        </script>";
-        exit();
-    }
-    $checkTel->close();
-
-    // 6. Insertar el repartidor de forma segura
-    $sql = "INSERT INTO repartidor (CedulaR, nombre, contrasena, telefono, estado, cedula_admin) VALUES (?, ?, ?, ?, 'Inactivo', ?)";
-    $stmt = $conexion->prepare($sql);
-    
-    if ($stmt) {
-        $stmt->bind_param("sssss", $cedulaR, $nombre, $password, $telefono, $cedulaAdmin);
+    try {
+        // 3. Verificar que el administrador exista en la base de datos
+        $checkAdmin = $pdo->prepare("SELECT cedula FROM administrador WHERE cedula = ?");
+        $checkAdmin->execute([$cedulaAdmin]);
         
-        if ($stmt->execute()) {
+        if ($checkAdmin->rowCount() === 0) {
+            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+            echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Administrador no encontrado',
+                        text: 'La cédula del administrador ingresada no está registrada en el sistema.'
+                    }).then(() => { window.history.back(); });
+                });
+            </script>";
+            exit();
+        }
+
+        // 4. Verificar si la cédula ya existe en TODO EL SISTEMA (Repartidores o Administradores)
+        $checkCedula = $pdo->prepare("
+            SELECT CedulaR FROM repartidor WHERE CedulaR = ?
+            UNION
+            SELECT cedula FROM administrador WHERE cedula = ?
+        ");
+        $checkCedula->execute([$cedulaR, $cedulaR]);
+        
+        if ($checkCedula->rowCount() > 0) {
+            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+            echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '¡Cédula ya registrada!',
+                        text: 'El número de cédula " . addslashes($cedulaR) . " ya se encuentra registrado en el sistema (pertenece a otro usuario).',
+                        confirmButtonText: 'Volver'
+                    }).then(() => {
+                        window.history.back();
+                    });
+                });
+            </script>";
+            exit();
+        }
+
+        // 5. Verificar si el teléfono ya existe en TODO EL SISTEMA (Repartidores o Administradores)
+        $checkTel = $pdo->prepare("
+            SELECT telefono FROM repartidor WHERE telefono = ?
+            UNION
+            SELECT telefono FROM administrador WHERE telefono = ?
+        ");
+        $checkTel->execute([$telefono, $telefono]);
+        
+        if ($checkTel->rowCount() > 0) {
+            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+            echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '¡Teléfono ya registrado!',
+                        text: 'El número de teléfono " . addslashes($telefono) . " ya se encuentra registrado en el sistema (pertenece a otro usuario).',
+                        confirmButtonText: 'Volver'
+                    }).then(() => {
+                        window.history.back();
+                    });
+                });
+            </script>";
+            exit();
+        }
+
+        // 6. Cifrar la contraseña de manera segura
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        // 7. Insertar el repartidor de forma segura
+        $sql = "INSERT INTO repartidor (CedulaR, nombre, contrasena, telefono, estado, cedula_admin) VALUES (?, ?, ?, ?, 'Inactivo', ?)";
+        $stmt = $pdo->prepare($sql);
+        
+        if ($stmt->execute([$cedulaR, $nombre, $passwordHash, $telefono, $cedulaAdmin])) {
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
             echo "<body style='background-color: #f8f9fa;'></body>";
             echo "<script>
@@ -134,27 +139,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             </script>";
             exit();
-        } else {
-            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-            echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error al registrar repartidor',
-                        text: '" . addslashes($stmt->error) . "',
-                        confirmButtonText: 'Volver'
-                    }).then(() => {
-                        window.history.back();
-                    });
-                });
-            </script>";
         }
-        
-        $stmt->close();
-    } else {
-        echo "Error en la preparación de la consulta: " . $conexion->error;
-    }
 
-    $conexion->close();
+    } catch (PDOException $e) {
+        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al registrar repartidor',
+                    text: 'Error en la base de datos: " . addslashes($e->getMessage()) . "',
+                    confirmButtonText: 'Volver'
+                }).then(() => {
+                    window.history.back();
+                });
+            });
+        </script>";
+    }
 }
 ?>

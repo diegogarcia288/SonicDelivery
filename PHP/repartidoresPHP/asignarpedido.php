@@ -1,27 +1,43 @@
 <?php
-// Salimos un nivel para encontrar la conexión global
-include('../conexion.php');
+// Desactivar la visualización de errores directos para proteger el JSON
+ini_set('display_errors', 0);
+error_reporting(0);
 
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
-$id_pedido = $_POST['id_pedido'] ?? '';
-$cedula_repartidor = $_POST['cedula_repartidor'] ?? '';
+// Incluir la conexión PDO
+if (file_exists('../conexion.php')) {
+    include('../conexion.php');
+} elseif (file_exists('conexion.php')) {
+    include('conexion.php');
+}
 
-if (empty($id_pedido) || empty($cedula_repartidor)) {
-    echo json_encode(["exito" => false, "mensaje" => "Faltan datos para asignar el pedido."]);
+// Validar que la conexión PDO ($pdo) exista
+if (!isset($pdo)) {
+    echo json_encode(["exito" => false, "mensaje" => "Error de conexión a la base de datos"], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// Actualizamos el pedido asignándole la cédula del repartidor y cambiando el estado a 'Asignado'
-$sql = "UPDATE pedidos SET CedulaR = '$cedula_repartidor', estado = 'Asignado' WHERE ID_pedido = '$id_pedido'";
-$resultado = mysqli_query($conexion, $sql);
+$id_pedido         = trim($_POST['id_pedido'] ?? '');
+$cedula_repartidor = trim($_POST['cedula_repartidor'] ?? '');
 
-if ($resultado) {
-    echo json_encode(["exito" => true, "mensaje" => "Pedido asignado correctamente."]);
-} else {
-    echo json_encode(["exito" => false, "mensaje" => "Error al actualizar la base de datos."]);
+if (empty($id_pedido) || empty($cedula_repartidor)) {
+    echo json_encode(["exito" => false, "mensaje" => "Faltan datos para asignar el pedido."], JSON_UNESCAPED_UNICODE);
+    exit;
 }
 
-$conexion->close();
-exit;
+try {
+    // Actualizamos el pedido de forma segura con PDO asignándole la cédula y el estado 'Asignado'
+    $sql = "UPDATE pedidos SET CedulaR = ?, estado = 'Asignado' WHERE ID_pedido = ?";
+    $stmt = $pdo->prepare($sql);
+    
+    if ($stmt->execute([$cedula_repartidor, $id_pedido])) {
+        echo json_encode(["exito" => true, "mensaje" => "Pedido asignado correctamente."], JSON_UNESCAPED_UNICODE);
+    } else {
+        echo json_encode(["exito" => false, "mensaje" => "Error al actualizar la base de datos."], JSON_UNESCAPED_UNICODE);
+    }
+
+} catch (PDOException $e) {
+    echo json_encode(["exito" => false, "mensaje" => "Error SQL: " . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+}
 ?>

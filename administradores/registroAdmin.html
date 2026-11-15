@@ -13,10 +13,22 @@
 
 <body>
 
+  <!-- VALIDACIÓN DE SESIÓN -->
+
+  <script>
+    // Verificamos si existe la sesión y el rol correspondiente en el navegador
+    const rolSonic = localStorage.getItem('rolSonic');
+    if (!rolSonic || rolSonic !== 'Administrador') {
+      // Si no está logueado o no tiene el rol correcto, lo devolvemos al inicio de sesión
+      alert('Acceso no autorizado. Por favor inicia sesión.');
+      window.location.href = '../iniciosesion.html'; // Ajusta la ruta a tu página de login principal
+    }
+  </script>
+
   <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card shadow-lg mx-auto" style="max-width: 650px; width: 100%;">
       <div class="row g-0 align-items-center">
-        
+
         <!-- Logo -->
         <div class="col-md-5 text-center p-3">
           <img src="../imagenes/sonic logo.jpeg" class="img-fluid" alt="Logo Sonic Delivery">
@@ -44,8 +56,8 @@
 
                 <div class="mb-3">
                   <label for="contraseña_administrador" class="form-label">CONTRASEÑA ADMINISTRADOR</label>
-                  <input type="password" class="form-control" id="contraseña_administrador" name="contraseña_administrador"
-                    placeholder="Números, letras y caracteres especiales" required>
+                  <input type="password" class="form-control" id="contraseña_administrador"
+                    name="contraseña_administrador" placeholder="Números, letras y caracteres especiales" required>
                 </div>
 
                 <div class="mb-3">

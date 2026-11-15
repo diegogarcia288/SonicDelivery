@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sonic Delivery - Pedidos Tomados</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts: Archivo Black -->
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
@@ -15,102 +15,124 @@
 
 <body>
 
-<!-- MENÚ DE NAVEGACIÓN -->
-<nav class="navbar navbar-expand-lg navbar-custom shadow-sm flex-shrink-0">
-    <div class="container-fluid">
-        <!-- LOGO -->
-        <a class="navbar-brand text-white fw-bold" href="#">🌐 SONIC DELIVERY 🌐</a>
-        
-        <!-- BOTÓN MENÚ HAMBURGUESA -->
-        <button class="navbar-toggler border-light text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
-        </button>
+    <!-- VALIDACIÓN DE SESIÓN -->
 
-        <!-- CONTENEDOR COLAPSIBLE -->
-        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-            <!-- ENLACES DE NAVEGACIÓN -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 my-2 my-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link text-white active px-3 py-2" href="PedidosDD.html">📦 Pedidos Disponibles</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white px-3 py-2" href="PedidosTomados.html">🛵 Pedidos Tomados</a>
-                </li>
-            </ul>
+    <script>
+        // Verificamos si existe la sesión y el rol correspondiente en el navegador
+        const rolSonic = localStorage.getItem('rolSonic');
+        if (!rolSonic || rolSonic !== 'Repartidor') {
+            // Si no está logueado o no tiene el rol correcto, lo devolvemos al inicio de sesión
+            alert('Acceso no autorizado. Por favor inicia sesión.');
+            window.location.href = '../iniciosesion.html'; // Ajusta la ruta a tu página de login principal
+        }
+    </script>
 
-            <!-- SECCIÓN DERECHA: PERFIL Y BOTÓN SALIR -->
-            <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 mt-2 mt-lg-0">
-                <!-- Perfil de Sesión -->
-                <div class="d-flex align-items-center bg-dark bg-opacity-25 px-3 py-1 rounded-pill border border-light border-opacity-10 shadow-sm">
-                    <div class="me-2 fs-5">🛵</div>
-                    <div class="d-flex flex-column text-start">
-                        <span class="text-white-50" style="font-size: 0.65rem; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1;">Repartidor</span>
-                        <span id="infoSesion" class="text-white fw-bold" style="font-size: 0.85rem;">Cargando...</span>
+    <!-- MENÚ DE NAVEGACIÓN -->
+    <nav class="navbar navbar-expand-lg navbar-custom shadow-sm flex-shrink-0">
+        <div class="container-fluid">
+            <!-- LOGO -->
+            <a class="navbar-brand text-white fw-bold" href="#">🌐 SONIC DELIVERY 🌐</a>
+
+            <!-- BOTÓN MENÚ HAMBURGUESA -->
+            <button class="navbar-toggler border-light text-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+
+            <!-- CONTENEDOR COLAPSIBLE -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                <!-- ENLACES DE NAVEGACIÓN -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 my-2 my-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-white active px-3 py-2" href="PedidosDD.html">📦 Pedidos Disponibles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white px-3 py-2" href="PedidosTomados.html">🛵 Pedidos Tomados</a>
+                    </li>
+                </ul>
+
+                <!-- SECCIÓN DERECHA: PERFIL Y BOTÓN SALIR -->
+                <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 mt-2 mt-lg-0">
+                    <!-- Perfil de Sesión -->
+                    <div
+                        class="d-flex align-items-center bg-dark bg-opacity-25 px-3 py-1 rounded-pill border border-light border-opacity-10 shadow-sm">
+                        <div class="me-2 fs-5">🛵</div>
+                        <div class="d-flex flex-column text-start">
+                            <span class="text-white-50"
+                                style="font-size: 0.65rem; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1;">Repartidor</span>
+                            <span id="infoSesion" class="text-white fw-bold"
+                                style="font-size: 0.85rem;">Cargando...</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Botón de Cerrar Sesión -->
-                <button id="btnCerrarSesion" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold text-white border-danger w-100 w-lg-auto" type="button">Cerrar Sesión</button>
+                    <!-- Botón de Cerrar Sesión -->
+                    <button id="btnCerrarSesion"
+                        class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold text-white border-danger w-100 w-lg-auto"
+                        type="button">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- TÍTULO H1 -->
+    <h1 class="mt-3 mb-3 py-2 fs-3 w-100 text-center">Pedidos Tomados</h1>
+
+    <!-- VISTA PEDIDOS -->
+    <div class="main-content container-fluid px-3 my-3">
+        <div class="card shadow p-3 bg-white flex-fill d-flex flex-column overflow-hidden border-custom">
+            <h4 class="mb-3 flex-shrink-0 fw-bold" style="color: rgb(18, 79, 114);">Lista de Pedidos Tomados</h4>
+
+            <!-- 1. VISTA DE TABLA (Solo PC / Pantallas medianas y grandes) -->
+            <div class="table-scroll-container table-responsive flex-fill d-none d-md-block">
+                <table class="table table-dark table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID Pedido</th>
+                            <th>Comercio</th>
+                            <th>Detalles</th>
+                            <th>Dirección</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaPedidosBody">
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">Cargando pedidos tomados...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2. VISTA DE TARJETAS (Solo Teléfonos Celulares) -->
+            <div id="contenedorTarjetasPedidosCelular" class="d-md-none mb-4">
+                <!-- Las tarjetas móviles se inyectarán aquí automáticamente -->
             </div>
         </div>
     </div>
-</nav>
 
-<!-- TÍTULO H1 -->
-<h1 class="mt-3 mb-3 py-2 fs-3 w-100 text-center">Pedidos Tomados</h1>
+    <!-- FOOTER -->
+    <footer>
+        <nav class="navbar navbar-expand-lg navbar-custom m-0 py-1">
+            <div class="container-fluid justify-content-center">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item d-flex gap-3 my-1">
+                        <button class="btn btn-success btn-sm fw-bold px-4" type="button"
+                            onclick="cambiarDisponibilidad('activo')">🟢 Activarse</button>
+                        <button class="btn btn-danger btn-sm fw-bold px-4" type="button"
+                            onclick="cambiarDisponibilidad('desactivo')">🔴 Desactivarse</button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </footer>
 
-<!-- VISTA PEDIDOS -->
-<div class="main-content container-fluid px-3 my-3">
-    <div class="card shadow p-3 bg-white flex-fill d-flex flex-column overflow-hidden border-custom">
-        <h4 class="mb-3 flex-shrink-0 fw-bold" style="color: rgb(18, 79, 114);">Lista de Pedidos Tomados</h4>
-
-        <!-- 1. VISTA DE TABLA (Solo PC / Pantallas medianas y grandes) -->
-        <div class="table-scroll-container table-responsive flex-fill d-none d-md-block">
-            <table class="table table-dark table-striped align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>ID Pedido</th>
-                        <th>Comercio</th>
-                        <th>Detalles</th>
-                        <th>Dirección</th>
-                        <th>Estado</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaPedidosBody">
-                    <tr><td colspan="6" class="text-center text-muted">Cargando pedidos tomados...</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 2. VISTA DE TARJETAS (Solo Teléfonos Celulares) -->
-        <div id="contenedorTarjetasPedidosCelular" class="d-md-none mb-4">
-            <!-- Las tarjetas móviles se inyectarán aquí automáticamente -->
-        </div>
-    </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-    <nav class="navbar navbar-expand-lg navbar-custom m-0 py-1">
-        <div class="container-fluid justify-content-center">
-            <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item d-flex gap-3 my-1">
-                    <button class="btn btn-success btn-sm fw-bold px-4" type="button" onclick="cambiarDisponibilidad('activo')">🟢 Activarse</button>
-                    <button class="btn btn-danger btn-sm fw-bold px-4" type="button" onclick="cambiarDisponibilidad('desactivo')">🔴 Desactivarse</button>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Scripts organizados y asegurados -->
-<script src="../js/repartidores.js/pedidosD.js" defer></script>
-<script src="../js/repartidores.js/pedidosTomados.js" defer></script>
-<script src="../js/sesionNavbar.js" defer></script>
-<script src="../js/repartidores.js/cambiarDisponibilidad.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts organizados y asegurados -->
+    <script src="../js/repartidores.js/pedidosD.js" defer></script>
+    <script src="../js/repartidores.js/pedidosTomados.js" defer></script>
+    <script src="../js/sesionNavbar.js" defer></script>
+    <script src="../js/repartidores.js/cambiarDisponibilidad.js" defer></script>
 
 </body>
 

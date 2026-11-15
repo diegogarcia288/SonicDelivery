@@ -1,9 +1,13 @@
 <?php
+// Iniciamos sesión para proteger el acceso al panel del comercio
+session_start();
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('../conexion.php');
+// Conexión PDO (asegúrate de que esté dos niveles arriba si estás en comercioPHP, o ajusta a '../conexion.php' si está un nivel arriba)
+require_once '../conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Capturamos usando los name exactos del HTML: 'UsuarioComercio' y 'contrasena'
@@ -25,51 +29,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Consulta SQL usando las columnas exactas de tu tabla en XAMPP
-    $sql = "SELECT * FROM comercio WHERE UsuarioComercio = ? AND contraseña = ?";
-    $stmt = $conexion->prepare($sql);
-    
-    if ($stmt) {
-        $stmt->bind_param("ss", $usuario, $password);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
+    try {
+        // Consulta SQL usando PDO y consultas preparadas
+        $sql = "SELECT * FROM comercio WHERE UsuarioComercio = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$usuario]);
+        $comercio = $stmt->fetch();
 
-        // Si se encuentra el registro exacto
-        if ($resultado->num_rows === 1) {
-            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-            echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    localStorage.setItem('rolSonic', 'comercio');
-                    localStorage.setItem('usuarioComercio', '" . $usuario . "');
+        // Si se encuentra el registro del comercio
+        if ($comercio) {
+            $stored_hash = $comercio['contraseña'];
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Bienvenido, Comercio!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        window.location.href = window.location.origin + '/sonic_delivery/comercios/RealizaP.html';
+            // Verificar contraseña (compatible con hashes seguros o texto plano temporal)
+            if (password_verify($password, $stored_hash) || $password === $stored_hash) {
+                
+                // Creamos las variables de sesión de PHP
+                $_SESSION['usuario_comercio'] = $usuario;
+
+                echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+                echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        localStorage.setItem('rolSonic', 'comercio');
+                        localStorage.setItem('usuarioComercio', '" . addslashes($usuario) . "');
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Bienvenido, Comercio!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.href = window.location.origin + '/sonic_delivery/comercios/RealizaP.html';
+                        });
                     });
-                });
-            </script>";
-        } else {
-            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-            echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Datos incorrectos',
-                        text: 'El usuario o la contraseña no coinciden.'
-                    }).then(() => { window.history.back(); });
-                });
-            </script>";
+                </script>";
+                exit();
+            }
         }
 
-        $stmt->close();
-    } else {
-        echo "Error en la consulta: " . $conexion->error;
-    }
+        // Si falla la autenticación (usuario no existe o contraseña incorrecta)
+        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Datos incorrectos',
+                    text: 'El usuario o la contraseña no coinciden.'
+                }).then(() => { window.history.back(); });
+            });
+        </script>";
 
-    $conexion->close();
+    } catch (Exception $e) {
+        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de sistema',
+                    text: 'Ocurrió un error al procesar la solicitud.'
+                }).then(() => { window.history.back(); });
+            });
+        </script>";
+    }
 }
 ?>

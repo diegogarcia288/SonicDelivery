@@ -1,30 +1,47 @@
 <?php
-header('Content-Type: application/json');
-include('../conexion.php');
+// Desactivar la visualización de errores directos para proteger el JSON
+ini_set('display_errors', 0);
+error_reporting(0);
 
-$cedula = isset($_GET['cedula']) ? $_GET['cedula'] : '';
+header('Content-Type: application/json; charset=utf-8');
 
-if (empty($cedula)) {
-    echo json_encode([]);
+// Incluir la conexión PDO (subiendo un nivel si es necesario)
+if (file_exists('../conexion.php')) {
+    include('../conexion.php');
+} elseif (file_exists('conexion.php')) {
+    include('conexion.php');
+}
+
+// Validar que la conexión PDO ($pdo) exista
+if (!isset($pdo)) {
+    echo json_encode([], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-$sql = "SELECT ID_pedido, comercioP, detalle, direccion, estado 
-        FROM pedidos 
-        WHERE CedulaR = ? AND estado IN ('Asignado', 'Recogido')";
+$cedula = isset($_GET['cedula']) ? trim($_GET['cedula']) : '';
 
-$stmt = $conexion->prepare($sql);
-$stmt->bind_param("s", $cedula);
-$stmt->execute();
-$resultado = $stmt->get_result();
-
-$pedidos = [];
-while ($row = $resultado->fetch_assoc()) {
-    $pedidos[] = $row;
+if (empty($cedula)) {
+    echo json_encode([], JSON_UNESCAPED_UNICODE);
+    exit;
 }
 
-echo json_encode($pedidos);
+try {
+    // Consultar los pedidos tomados por el repartidor usando PDO y consultas preparadas
+    $sql = "SELECT ID_pedido, comercioP, detalle, direccion, estado 
+            FROM pedidos 
+            WHERE CedulaR = ? AND estado IN ('Asignado', 'Recogido')";
+            
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$cedula]);
+    
+    // Obtener todos los registros en un arreglo asociativo
+    $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt->close();
-$conexion->close();
+    // Devolver el JSON limpio con soporte Unicode
+    echo json_encode($pedidos, JSON_UNESCAPED_UNICODE);
+
+} catch (PDOException $e) {
+    // Si hay error en la base de datos, devolver un arreglo vacío
+    echo json_encode([], JSON_UNESCAPED_UNICODE);
+}
 ?>

@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 async function ejecutarCierreSesion(cedula) {
-    // Si existe una cédula asociada (por ejemplo, repartidor), actualizamos su estado a Inactivo en el servidor
+    // 1. Si existe una cédula asociada (por ejemplo, repartidor), actualizamos su estado a Inactivo en el servidor
     if (cedula) {
         try {
             let response = await fetch(window.location.origin + "/sonic_delivery/PHP/repartidoresPHP/actualizarestado.php", {
@@ -54,13 +54,23 @@ async function ejecutarCierreSesion(cedula) {
             });
 
             let data = await response.json();
-            console.log("Respuesta del servidor PHP:", data);
+            console.log("Respuesta del servidor PHP (estado repartidor):", data);
         } catch (error) {
             console.error("Error al actualizar el estado en el servidor:", error);
         }
     }
 
-    // Limpiamos todo el almacenamiento local y redirigimos al login principal
+    // 2. Destruimos la sesión activa en el servidor llamando al archivo PHP de cierre de sesión
+    try {
+        await fetch(window.location.origin + "/sonic_delivery/PHP/cerrar_sesion.php", {
+            method: "GET"
+        });
+        console.log("Sesión de PHP destruida en el servidor.");
+    } catch (error) {
+        console.error("Error al destruir la sesión en el servidor:", error);
+    }
+
+    // 3. Limpiamos todo el almacenamiento local y redirigimos al login principal
     localStorage.clear(); 
     window.location.href = window.location.origin + "/sonic_delivery/iniciosesion.html";
 }
